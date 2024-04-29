@@ -1,19 +1,17 @@
-const COMMANDS = [
-	{
-		keywords: [],
-		action: () => {},
-	},
-];
+import { log } from "./views/consoleView.js";
+import { getCommand } from "./controllers/commands.js";
 
 let parameters = process.argv.slice(2);
 
 if (parameters.length < 1) {
-	console.log("Please provide a command");
+	log("Please provide a command");
 	process.exit(1);
 }
 
-let matchedCommand =
-	COMMANDS.find(command => command.keywords.includes(parameters[0])) ??
-	console.log("Command not found");
+let matchedCommand = getCommand(parameters[0]);
 
-matchedCommand?.action(...parameters.slice(1));
+if (!matchedCommand) {
+	log("Command not found");
+} else {
+	matchedCommand.action(...parameters.slice(1));
+}
