@@ -16,4 +16,4 @@ let matchedCommand =
 	COMMANDS.find(command => command.keywords.includes(parameters[0])) ??
 	console.log("Command not found");
 
-matchedCommand?.action(parameters.slice(1));
+matchedCommand?.action(...parameters.slice(1));
