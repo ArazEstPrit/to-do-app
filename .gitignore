@@ -191,3 +191,5 @@ dist
 .ionide
 
 # Lmao 99% of this is useless
+
+/database/*

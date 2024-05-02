@@ -1,7 +1,9 @@
+import { createTask } from "../services/taskService.js";
+
 const COMMANDS = [
 	{
-		keywords: [],
-		action: () => { },
+		keywords: ["add", "a"],
+		action: createTask,
 	},
 ];
 
