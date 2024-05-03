@@ -24,6 +24,15 @@ export function createTask(name, dueDate) {
 
 	let data = getTasks();
 
+	if (
+		data.find(
+			t => t.name == task.name && t.dueDate == task.dueDate.toISOString()
+		)
+	) {
+		logError("A task with the same name and due date already exists");
+		return;
+	}
+
 	data.push(task);
 
 	writeFile("./database/tasks.json", JSON.stringify(data, null, "\t"));
