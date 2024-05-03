@@ -35,3 +35,17 @@ export function getTasks() {
 	let tasks = JSON.parse(readFile("./database/tasks.json") || "[]");
 	return tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 }
+
+export function deleteTask(name) {
+	let tasks = getTasks();
+	let filteredTasks = tasks.filter(task => task.name != name);
+
+	if (filteredTasks.length == tasks.length) {
+		logError("Task not found");
+	} else {
+		writeFile(
+			"./database/tasks.json",
+			JSON.stringify(filteredTasks, null, "\t")
+		);
+	}
+}

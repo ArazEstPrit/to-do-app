@@ -1,4 +1,4 @@
-import { createTask } from "../services/taskService.js";
+import { createTask, deleteTask } from "../services/taskService.js";
 import { viewTasks } from "../views/consoleView.js";
 
 const COMMANDS = [
@@ -9,7 +9,11 @@ const COMMANDS = [
 	{
 		keywords: ["view", "v"],
 		action: viewTasks,
-	}
+	},
+	{
+		keywords: ["complete", "c", "delete", "d"],
+		action: deleteTask,
+	},
 ];
 
 export function getCommand(keyword) {
