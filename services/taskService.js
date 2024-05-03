@@ -22,7 +22,7 @@ export function createTask(name, dueDate) {
 		return;
 	}
 
-	let data = JSON.parse(readFile("./database/tasks.json") || "[]");
+	let data = getTasks();
 
 	data.push(task);
 
@@ -31,3 +31,7 @@ export function createTask(name, dueDate) {
 	log("Task added!");
 }
 
+export function getTasks() {
+	let tasks = JSON.parse(readFile("./database/tasks.json") || "[]");
+	return tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+}
