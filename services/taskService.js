@@ -38,15 +38,25 @@ export function getTasks() {
 
 export function deleteTask(name) {
 	let tasks = getTasks();
-	let filteredTasks = tasks.filter(task => task.name != name);
 
-	if (filteredTasks.length == tasks.length) {
+	let taskToDelete = tasks
+		.filter(task => task.name == name)
+		.sort((a, b) => a.dueDate - b.dueDate)[0];
+
+	if (!taskToDelete) {
 		logError("Task not found");
-	} else {
-		log(`Task "${name}" deleted!`);
-		writeFile(
-			"./database/tasks.json",
-			JSON.stringify(filteredTasks, null, "\t")
-		);
+		return;
 	}
+
+	let filteredTasks = tasks.filter(
+		task =>
+			task.name != taskToDelete.name ||
+			task.dueDate != taskToDelete.dueDate
+	);
+
+	log(`Task "${name}" deleted!`);
+	writeFile(
+		"./database/tasks.json",
+		JSON.stringify(filteredTasks, null, "\t")
+	);
 }
