@@ -43,6 +43,7 @@ export function deleteTask(name) {
 	if (filteredTasks.length == tasks.length) {
 		logError("Task not found");
 	} else {
+		log(`Task "${name}" deleted!`);
 		writeFile(
 			"./database/tasks.json",
 			JSON.stringify(filteredTasks, null, "\t")
