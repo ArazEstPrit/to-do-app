@@ -37,7 +37,7 @@ export function createTask(name, dueDate) {
 
 	writeFile("./database/tasks.json", JSON.stringify(data, null, "\t"));
 
-	log("Task added!");
+	log(`Task "${name}" created!`);
 }
 
 export function getTasks() {
