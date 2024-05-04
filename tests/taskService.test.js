@@ -14,6 +14,7 @@ describe("createTask", () => {
 
 	afterEach(() => {
 		jest.restoreAllMocks();
+		writeFile("./database/tasks.json", JSON.stringify([], null, "\t"));
 	});
 
 	it("should create a new task", () => {
