@@ -36,7 +36,9 @@ describe("createTask", () => {
 		createTask("Past Due Date", "2020-01-01");
 		let tasks = getTasks();
 		expect(tasks).toHaveLength(0);
-		expect(console.error).toHaveBeenCalledWith("Due date must be in the future");
+		expect(console.error).toHaveBeenCalledWith(
+			"Due date must be in the future"
+		);
 	});
 
 	it("should not allow a duplicate task", () => {
@@ -44,12 +46,8 @@ describe("createTask", () => {
 		createTask("Duplicate Task", "2026-01-01");
 		let tasks = getTasks();
 		expect(tasks).toHaveLength(1);
-		expect(console.error).toHaveBeenCalledWith("A task with the same name and due date already exists");
+		expect(console.error).toHaveBeenCalledWith(
+			"A task with the same name and due date already exists"
+		);
 	});
 });
-
-
-
-
-
-
