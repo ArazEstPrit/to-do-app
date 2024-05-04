@@ -2,7 +2,7 @@
   "name": "to-do-app",
   "version": "0.0.0",
   "description": "A to-do list app",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "start": "node main.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
