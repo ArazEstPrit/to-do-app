@@ -8,7 +8,7 @@ Clone this repository and run `npm install` to install the dependencies. Ensure 
 To use the app, run `npm start` (or `node main.js`) along with one of these commands:
 
 * `add "<task name>" <due date>` - Adds a task with the specified name and due date. The due date has to be in the format YYYY-MM-DD.
-* `complete|delete <task name>` - Removes the task with that name. If multiple tasks have the same name, it will remove the one with the earliest due date.
+* `complete|delete "<task name>"` - Removes the task with that name. If multiple tasks have the same name, it will remove the one with the earliest due date.
 * `view` - Lists all tasks
 
 You can also use the alias `a`, `c`, `d`, and `v` for the respective commands.
