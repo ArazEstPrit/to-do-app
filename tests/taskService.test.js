@@ -40,7 +40,7 @@ describe("taskService", () => {
 			expect(tasks[0].name).toBe("Test Task");
 			expect(tasks[0].dueDate).toBe(new Date("2026-01-01").toISOString());
 			expect(console.log).toHaveBeenCalledWith(
-				"Task \"Test Task\" created!"
+				"Task \"Test Task\" created!\nDue date: Thu, 01 Jan 2026"
 			);
 		});
 

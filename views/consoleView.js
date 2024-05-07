@@ -9,15 +9,20 @@ export function logError(msg) {
 	console.error(msg);
 }
 
+export const DATE_FORMAT = {
+	weekday: "short",
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+};
+
 export function viewTasks() {
 	let tasks = getTasks().map(task => ({
 		...task,
-		dueDate: new Date(task.dueDate).toLocaleDateString(undefined, {
-			weekday: "short",
-			day: "2-digit",
-			month: "short",
-			year: "numeric",
-		}),
+		dueDate: new Date(task.dueDate).toLocaleDateString(
+			undefined,
+			DATE_FORMAT
+		),
 	}));
 
 	if (tasks.length === 0) {

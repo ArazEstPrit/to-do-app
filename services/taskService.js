@@ -1,5 +1,5 @@
 import { Task } from "../models/task.js";
-import { log, logError } from "../views/consoleView.js";
+import { DATE_FORMAT, log, logError } from "../views/consoleView.js";
 import { readFile, writeFile } from "./fileService.js";
 
 export function createTask(name, dueDate) {
@@ -8,8 +8,8 @@ export function createTask(name, dueDate) {
 		return;
 	}
 
-	// Only accepts date format yyyy-mm-dd
-	// TODO: better date parsing
+	// Only accepts date format yyyy-mm-dd, and stuff like "June 4 2024" apparently
+	// TODO: better date parsing? maybe not needed anymore?
 	let task = new Task(name, new Date(dueDate));
 
 	if (task.dueDate == "Invalid Date") {
@@ -37,7 +37,12 @@ export function createTask(name, dueDate) {
 
 	writeFile("./database/tasks.json", JSON.stringify(data, null, "\t"));
 
-	log(`Task "${name}" created!`);
+	log(
+		`Task "${name}" created!\nDue date: ${task.dueDate.toLocaleDateString(
+			undefined,
+			DATE_FORMAT
+		)}`
+	);
 }
 
 export function getTasks() {
