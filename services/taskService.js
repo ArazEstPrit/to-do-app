@@ -1,26 +1,37 @@
 import { Task } from "../models/task.js";
-import { DATE_FORMAT, log, logError } from "../views/consoleView.js";
+import {
+	DATE_FORMAT,
+	log,
+	logError,
+	promptForProperty,
+} from "../views/consoleView.js";
 import { readFile, writeFile } from "./fileService.js";
 
-export function createTask(name, dueDate) {
-	if (!name || !dueDate) {
-		logError("Please provide a name and due date");
-		return;
-	}
+export async function createTask(name, dueDate) {
+	// TODO: write unit tests for promptForProperty()
+	// The current unit tests only test for when the name and due date are
+	// already passed as arguments.
+	let taskName = name || (await promptForProperty("Task Name"));
 
-	// Only accepts date format yyyy-mm-dd, and stuff like "June 4 2024" apparently
-	// TODO: better date parsing? maybe not needed anymore?
-	let task = new Task(name, new Date(dueDate));
+	let isDateValid = dueDate => {
+		if (new Date(dueDate) == "Invalid Date") {
+			logError("Invalid due date");
+			return false;
+		} else if (new Date(dueDate) < new Date()) {
+			logError("Due date must be in the future");
+			return false;
+		}
+		return true;
+	};
 
-	if (task.dueDate == "Invalid Date") {
-		logError("Invalid due date");
-		return;
-	}
+	let taskDueDate =
+		dueDate && isDateValid(dueDate)
+			? new Date(dueDate)
+			: new Date(await promptForProperty("Due Date", isDateValid));
 
-	if (task.dueDate < new Date()) {
-		logError("Due date must be in the future");
-		return;
-	}
+	log("");
+
+	let task = new Task(taskName, taskDueDate);
 
 	let data = getTasks();
 
@@ -30,6 +41,7 @@ export function createTask(name, dueDate) {
 		)
 	) {
 		logError("A task with the same name and due date already exists");
+		createTask();
 		return;
 	}
 
@@ -38,7 +50,9 @@ export function createTask(name, dueDate) {
 	writeFile("./database/tasks.json", JSON.stringify(data, null, "\t"));
 
 	log(
-		`Task "${name}" created!\nDue date: ${task.dueDate.toLocaleDateString(
+		`Task "${
+			task.name
+		}" created!\nDue date: ${task.dueDate.toLocaleDateString(
 			undefined,
 			DATE_FORMAT
 		)}`

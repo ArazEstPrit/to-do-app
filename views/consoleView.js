@@ -1,4 +1,5 @@
 import { getTasks } from "../services/taskService.js";
+import readline from "readline";
 
 // These two functions are very simple for now, but I'll expand on them later.
 export function log(msg) {
@@ -30,4 +31,38 @@ export function viewTasks() {
 	} else {
 		console.table(tasks);
 	}
+}
+
+// The validation feature of this function is not used yet, but I'm keeping it
+// just in case we need it in the future.
+export async function promptForProperty(label, validate = () => true) {
+	let rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
+
+	let ask = async () => {
+		let input = await new Promise(resolve =>
+			rl.question(`${label}: `, resolve)
+		);
+		if (validate(input)) {
+			rl.close();
+			return input.trim();
+		} else {
+			return ask();
+		}
+	};
+
+	return await ask();
+}
+
+// Unused for now, may need later
+export async function promptForProperties(propertyDefinitions) {
+	let properties = {};
+	for (let { name, condition } of propertyDefinitions) {
+		properties[name] = await promptForProperty(name, condition);
+	}
+
+	log(""); // for new line;
+	return properties;
 }
