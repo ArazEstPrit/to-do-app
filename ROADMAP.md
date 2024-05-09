@@ -54,3 +54,7 @@ I'm outlining these as prerequisites for progressing to each version.
     - [ ] Customizable priority score - user defined flags that multiply score?
 - [ ] Integration:
     - [ ] API for 3rd party integration?
+
+## 3.0.0
+- [ ] Task synchronization across multiple devices
+- [ ] Mobile port
