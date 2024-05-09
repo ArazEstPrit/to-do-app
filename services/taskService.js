@@ -11,7 +11,19 @@ export async function createTask(name, dueDate) {
 	// TODO: write unit tests for promptForProperty()
 	// The current unit tests only test for when the name and due date are
 	// already passed as arguments.
-	let taskName = name || (await promptForProperty("Task Name"));
+
+	let isNameValid = name => {
+		if (name.trim() == "") {
+			logError("Task name cannot be empty");
+			return false;
+		}
+		return true;
+	};
+
+	let taskName =
+		name && isNameValid(name)
+			? name
+			: await promptForProperty("Task Name", isNameValid);
 
 	let isDateValid = dueDate => {
 		if (new Date(dueDate) == "Invalid Date") {
