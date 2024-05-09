@@ -76,25 +76,34 @@ export function getTasks() {
 	return tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 }
 
-export function deleteTask(name) {
+export async function deleteTask(name) {
 	let tasks = getTasks();
 
-	let taskToDelete = tasks
-		.filter(task => task.name == name)
-		.sort((a, b) => a.dueDate - b.dueDate)[0];
+	let getTaskToDelete = name => {
+		let tasksToDelete = tasks
+			.filter(task => task.name == name)
+			.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
-	if (!taskToDelete) {
-		logError("Task not found");
-		return;
-	}
+		if (tasksToDelete.length == 0) {
+			logError("Task not found");
+			return false;
+		}
+
+		return tasksToDelete[0];
+	};
+
+	let tasksToDelete = 
+		name && getTaskToDelete(name)
+			? getTaskToDelete(name)
+			: getTaskToDelete(await promptForProperty("Task Name", getTaskToDelete));
 
 	let filteredTasks = tasks.filter(
 		task =>
-			task.name != taskToDelete.name ||
-			task.dueDate != taskToDelete.dueDate
+			task.name != tasksToDelete.name ||
+			task.dueDate != tasksToDelete.dueDate
 	);
 
-	log(`Task "${name}" deleted!`);
+	log(`Task "${tasksToDelete.name}" deleted!`);
 	writeFile(
 		"./database/tasks.json",
 		JSON.stringify(filteredTasks, null, "\t")
