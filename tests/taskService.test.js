@@ -69,6 +69,15 @@ describe("taskService", () => {
 				"A task with the same name and due date already exists"
 			);
 		});
+
+		it("should not allow a task with an empty name", () => {
+			createTask("   ", "2026-01-01");
+			let tasks = getTasks();
+			expect(tasks).toHaveLength(0);
+			expect(console.error).toHaveBeenCalledWith("Task name cannot be empty");
+		});
+	
+		// TODO: take into account promptForProperty()
 	});
 
 	describe("deleteTask", () => {
