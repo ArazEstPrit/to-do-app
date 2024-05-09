@@ -26,7 +26,9 @@ export async function createTask(name, dueDate, description) {
 			: await promptForProperty("Task Name", isNameValid);
 
 	let isDateValid = dueDate => {
-		if (new Date(dueDate) == "Invalid Date") {
+		if (dueDate === "") {
+			return true;
+		} else if (new Date(dueDate) == "Invalid Date") {
 			logError("Invalid due date");
 			return false;
 		} else if (new Date(dueDate) < new Date()) {
@@ -38,8 +40,10 @@ export async function createTask(name, dueDate, description) {
 
 	let taskDueDate =
 		dueDate && isDateValid(dueDate)
-			? new Date(dueDate)
-			: new Date(await promptForProperty("Due Date", isDateValid));
+			? dueDate
+			: await promptForProperty("Due Date", isDateValid);
+	
+	taskDueDate = taskDueDate ? new Date(taskDueDate) : "";
 
 	let taskDescription =
 		description?.trim() || (await promptForProperty("Description"));
@@ -52,10 +56,13 @@ export async function createTask(name, dueDate, description) {
 
 	if (
 		data.find(
-			t => t.name == task.name && t.dueDate == task.dueDate.toISOString()
+			t =>
+				t.name == task.name &&
+				t.dueDate ==
+					(task.dueDate ? task.dueDate.toISOString() : task.dueDate)
 		)
 	) {
-		logError("A task with the same name and due date already exists");
+		logError("Task already exists");
 		createTask();
 		return;
 	}
@@ -67,10 +74,10 @@ export async function createTask(name, dueDate, description) {
 	log(
 		`Task "${
 			task.name
-		}" created!\nDue date: ${task.dueDate.toLocaleDateString(
+		}" created!${task.dueDate ? `\nDue date: ${task.dueDate.toLocaleDateString(
 			undefined,
 			DATE_FORMAT
-		)}${task.description ? `\nDescription: ${task.description}` : ""}`
+		)}`: ""}${task.description ? `\nDescription: ${task.description}` : ""}`
 	);
 }
 

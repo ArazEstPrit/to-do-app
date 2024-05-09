@@ -67,7 +67,7 @@ describe("taskService", () => {
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(console.error).toHaveBeenCalledWith(
-				"A task with the same name and due date already exists"
+				"Task already exists"
 			);
 		});
 
