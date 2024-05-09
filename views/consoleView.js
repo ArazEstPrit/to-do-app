@@ -33,8 +33,6 @@ export function viewTasks() {
 	}
 }
 
-// The validation feature of this function is not used yet, but I'm keeping it
-// just in case we need it in the future.
 export async function promptForProperty(label, validate = () => true) {
 	let rl = readline.createInterface({
 		input: process.stdin,
