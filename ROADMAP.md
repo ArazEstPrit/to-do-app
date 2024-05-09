@@ -18,7 +18,7 @@ I'm outlining these as prerequisites for progressing to each version.
 ## 1.0.0
 
 - [ ] Task Details:
-  - [ ] Description
+  - [x] Description
   - [ ] Customizable task statuses
   - [ ] Tags
   - [ ] Priority score
