@@ -7,10 +7,10 @@ import {
 } from "../views/consoleView.js";
 import { readFile, writeFile } from "./fileService.js";
 
-export async function createTask(name, dueDate) {
+export async function createTask(name, dueDate, description) {
 	// TODO: write unit tests for promptForProperty()
-	// The current unit tests only test for when the name and due date are
-	// already passed as arguments.
+	// The current unit tests only test for when the name, due date, and
+	// description are already passed as arguments.
 
 	let isNameValid = name => {
 		if (name.trim() == "") {
@@ -41,9 +41,12 @@ export async function createTask(name, dueDate) {
 			? new Date(dueDate)
 			: new Date(await promptForProperty("Due Date", isDateValid));
 
+	let taskDescription =
+		description?.trim() || (await promptForProperty("Description"));
+
 	log("");
 
-	let task = new Task(taskName, taskDueDate);
+	let task = new Task(taskName, taskDueDate, taskDescription);
 
 	let data = getTasks();
 
@@ -67,7 +70,7 @@ export async function createTask(name, dueDate) {
 		}" created!\nDue date: ${task.dueDate.toLocaleDateString(
 			undefined,
 			DATE_FORMAT
-		)}`
+		)}${task.description ? `\nDescription: ${task.description}` : ""}`
 	);
 }
 

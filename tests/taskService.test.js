@@ -34,25 +34,26 @@ describe("taskService", () => {
 		});
 
 		it("should create a new task", () => {
-			createTask("Test Task", "2026-01-01");
+			createTask("Test Task", "2026-01-01", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(tasks[0].name).toBe("Test Task");
+			expect(tasks[0].description).toBe("Test Description");
 			expect(tasks[0].dueDate).toBe(new Date("2026-01-01").toISOString());
 			expect(console.log).toHaveBeenCalledWith(
-				"Task \"Test Task\" created!\nDue date: Thu, 01 Jan 2026"
+				"Task \"Test Task\" created!\nDue date: Thu, 01 Jan 2026\nDescription: Test Description"
 			);
 		});
 
 		it("should not allow a task with an invalid due date", () => {
-			createTask("Invalid Due Date", "202502-31");
+			createTask("Invalid Due Date", "202502-31", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(0);
 			expect(console.error).toHaveBeenCalledWith("Invalid due date");
 		});
 
 		it("should not allow a task with a due date in the past", () => {
-			createTask("Past Due Date", "2020-01-01");
+			createTask("Past Due Date", "2020-01-01", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(0);
 			expect(console.error).toHaveBeenCalledWith(
@@ -61,8 +62,8 @@ describe("taskService", () => {
 		});
 
 		it("should not allow a duplicate task", () => {
-			createTask("Duplicate Task", "2026-01-01");
-			createTask("Duplicate Task", "2026-01-01");
+			createTask("Duplicate Task", "2026-01-01", "Test Description");
+			createTask("Duplicate Task", "2026-01-01", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(console.error).toHaveBeenCalledWith(
@@ -74,9 +75,11 @@ describe("taskService", () => {
 			createTask("   ", "2026-01-01");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(0);
-			expect(console.error).toHaveBeenCalledWith("Task name cannot be empty");
+			expect(console.error).toHaveBeenCalledWith(
+				"Task name cannot be empty"
+			);
 		});
-	
+
 		// TODO: take into account promptForProperty()
 	});
 
