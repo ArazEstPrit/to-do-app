@@ -41,12 +41,13 @@ export async function createTask(name, dueDate, description) {
 	let taskDueDate =
 		dueDate && isDateValid(dueDate)
 			? dueDate
-			: await promptForProperty("Due Date", isDateValid);
+			: await promptForProperty("Due Date (optional)", isDateValid);
 	
 	taskDueDate = taskDueDate ? new Date(taskDueDate) : "";
 
 	let taskDescription =
-		description?.trim() || (await promptForProperty("Description"));
+		description?.trim() ||
+		(await promptForProperty("Description (optional)"));
 
 	log("");
 

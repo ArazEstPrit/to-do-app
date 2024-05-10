@@ -45,7 +45,7 @@ export async function promptForProperty(label, validate = () => true) {
 
 	let ask = async () => {
 		let input = await new Promise(resolve =>
-			rl.question(`${label}: `, resolve)
+			rl.question(`? ${label}: `, resolve)
 		);
 		if (validate(input)) {
 			rl.close();
