@@ -18,13 +18,17 @@ export const DATE_FORMAT = {
 };
 
 export function viewTasks() {
-	let tasks = getTasks().map(task => ({
-		...task,
-		dueDate: task.dueDate ? new Date(task.dueDate).toLocaleDateString(
-			undefined,
-			DATE_FORMAT
-		) : "",
-	}));
+	let tasks = getTasks()
+		.sort((a, b) => Date.parse(b.dueDate || 0) - Date.parse(a.dueDate || 0))
+		.map(task => ({
+			...task,
+			dueDate: task.dueDate
+				? new Date(task.dueDate).toLocaleDateString(
+					undefined,
+					DATE_FORMAT
+				)
+				: "",
+		}));
 
 	if (tasks.length === 0) {
 		log("No tasks found");

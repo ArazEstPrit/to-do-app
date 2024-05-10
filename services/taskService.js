@@ -89,10 +89,12 @@ export function getTasks() {
 export async function deleteTask(name) {
 	let tasks = getTasks();
 
+	// If the user has multiple tasks with the same name, the one with the
+	// earliest due date will be deleted.
 	let getTaskToDelete = name => {
 		let tasksToDelete = tasks
 			.filter(task => task.name == name)
-			.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+			.sort((a, b) => new Date(b.dueDate || 0) - new Date(a.dueDate || 0));
 
 		if (tasksToDelete.length == 0) {
 			logError("Task not found");
