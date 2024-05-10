@@ -10,7 +10,7 @@ Clone this repository and run `npm install` to install the dependencies. Ensure 
 
 To use the app, run `npm start` (or `node main.js`) along with one of these commands:
 
-* `add <task name> <due date>` - Adds a task with the specified name and due date. The due date can be in any of the formats below:
+* `add <task name> [<due date>] [<description>]` - Adds a task with the specified name, optional due date, and optional description. The due date can be in any of the formats below:
   * `YYYY-MM-DD` (e.g., `2024-06-05`)
   * `Month DD YYYY` (e.g., `June 5 2024`)
   * `DD Month YYYY` (e.g., `5 June 2024`)
@@ -22,12 +22,25 @@ You can also use the alias `a`, `c`, `d`, and `v` for the respective commands.
 
 For example:
 
-* `npm start a "buy groceries" 2024-06-05` will create a task named "buy groceries" for June 5th, 2024.
-* `npm start a work "July 2 2024"` will create a task named "work" for July 2nd, 2024.
+* `npm start a "buy groceries" 2024-06-05 "buy milk and bread"` will create a task named "buy groceries" for June 5th, 2024 with the description "buy milk and bread".
+* `npm start a work "July 2 2024"` will create a task named "work" for July 2nd, 2024 (with no description).
 * `npm start v` will show a table with all the tasks and their due dates.
 * `npm start complete "buy groceries"` will remove the task named "buy groceries" with the earliest due date.
 
 **Note**: If the task name or due date includes spaces, enclose them in quotes to ensure correct command execution.
+Additionally, when running the `add` or `complete|delete` commands without specifying all parameters, you will be prompted in the console to input the missing information like so:
+
+```console
+> npm start a
+
+? Task Name: buy groceries
+? Due Date (optional): 2024-06-05
+? Description (optional): buy milk and bread
+
+Task "buy groceries" created!
+Due date: Wed, 05 Jun 2024
+Description: buy milk and bread
+```
 
 ## Tests
 
