@@ -42,7 +42,7 @@ export async function createTask(name, dueDate, description) {
 		dueDate && isDateValid(dueDate)
 			? dueDate
 			: await promptForProperty("Due Date (optional)", isDateValid);
-	
+
 	taskDueDate = taskDueDate ? new Date(taskDueDate) : "";
 
 	let taskDescription =
@@ -73,12 +73,14 @@ export async function createTask(name, dueDate, description) {
 	writeFile("./database/tasks.json", JSON.stringify(data, null, "\t"));
 
 	log(
-		`Task "${
-			task.name
-		}" created!${task.dueDate ? `\nDue date: ${task.dueDate.toLocaleDateString(
-			undefined,
-			DATE_FORMAT
-		)}`: ""}${task.description ? `\nDescription: ${task.description}` : ""}`
+		`Task "${task.name}" created!${
+			task.dueDate
+				? `\nDue date: ${task.dueDate.toLocaleDateString(
+					undefined,
+					DATE_FORMAT
+				)}`
+				: ""
+		}${task.description ? `\nDescription: ${task.description}` : ""}`
 	);
 }
 
@@ -95,7 +97,9 @@ export async function deleteTask(name) {
 	let getTaskToDelete = name => {
 		let tasksToDelete = tasks
 			.filter(task => task.name == name)
-			.sort((a, b) => new Date(b.dueDate || 0) - new Date(a.dueDate || 0));
+			.sort(
+				(a, b) => new Date(b.dueDate || 0) - new Date(a.dueDate || 0)
+			);
 
 		if (tasksToDelete.length == 0) {
 			logError("Task not found");
@@ -105,10 +109,12 @@ export async function deleteTask(name) {
 		return tasksToDelete[0];
 	};
 
-	let tasksToDelete = 
+	let tasksToDelete =
 		name && getTaskToDelete(name)
 			? getTaskToDelete(name)
-			: getTaskToDelete(await promptForProperty("Task Name", getTaskToDelete));
+			: getTaskToDelete(
+				await promptForProperty("Task Name", getTaskToDelete)
+			);
 
 	let filteredTasks = tasks.filter(
 		task =>
