@@ -41,7 +41,12 @@ describe("taskService", () => {
 			expect(tasks[0].description).toBe("Test Description");
 			expect(tasks[0].dueDate).toBe(new Date("2026-01-01").toISOString());
 			expect(console.log).toHaveBeenCalledWith(
-				"Task \"Test Task\" created!\nDue date: Thu, 01 Jan 2026\nDescription: Test Description"
+				`Task "Test Task" created!\nDue date: ${new Date(
+					"2026-01-01"
+				).toLocaleDateString(
+					undefined,
+					DATE_FORMAT
+				)}\nDescription: Test Description`
 			);
 		});
 
