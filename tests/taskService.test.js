@@ -1,19 +1,19 @@
 import { jest } from "@jest/globals";
-import { readFile, writeFile } from "../services/fileService.js";
+import { writeFileSync, readFileSync, rmSync } from "fs";
 import { createTask, getTasks, deleteTask } from "../services/taskService.js";
-import { rmSync } from "fs";
+import { stdin as mockStdin } from "mock-stdin";
 
 describe("taskService", () => {
-	let backupFilename = "./database/tasks.json.bak";
+	const BACKUP_FILENAME = "./database/tasks.json.bak";
 
 	beforeAll(() => {
-		writeFile(backupFilename, readFile("./database/tasks.json"));
+		writeFileSync(BACKUP_FILENAME, readFileSync("./database/tasks.json"));
 	});
 
 	afterAll(() => {
-		writeFile("./database/tasks.json", readFile(backupFilename));
+		writeFileSync("./database/tasks.json", readFileSync(BACKUP_FILENAME));
 		try {
-			rmSync(backupFilename);
+			rmSync(BACKUP_FILENAME);
 		} catch (error) {
 			if (error.code !== "ENOENT") {
 				throw error;
@@ -22,45 +22,71 @@ describe("taskService", () => {
 	});
 
 	describe("createTask", () => {
+		let stdin;
+
+		function write(msg) {
+			process.nextTick(() => {
+				stdin.send(msg + "\r");
+			});
+		}
+
 		beforeEach(() => {
-			writeFile("./database/tasks.json", JSON.stringify([], null, "\t"));
+			writeFileSync(
+				"./database/tasks.json",
+				JSON.stringify([], null, "\t")
+			);
 
 			jest.spyOn(console, "log");
 			jest.spyOn(console, "error");
+
+			stdin = mockStdin();
 		});
 
 		afterEach(() => {
 			jest.restoreAllMocks();
+			writeFileSync(
+				"./database/tasks.json",
+				JSON.stringify([], null, "\t")
+			);
+			stdin.end();
 		});
 
 		it("should create a new task", () => {
 			createTask("Test Task", "2026-01-01", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
-			expect(tasks[0].name).toBe("Test Task");
-			expect(tasks[0].description).toBe("Test Description");
-			expect(tasks[0].dueDate).toBe(new Date("2026-01-01").toISOString());
-			expect(console.log).toHaveBeenCalledWith(
-				`Task "Test Task" created!\nDue date: ${new Date(
-					"2026-01-01"
-				).toLocaleDateString(
-					undefined,
-					DATE_FORMAT
-				)}\nDescription: Test Description`
+			expect(tasks[0]).toEqual({
+				name: "Test Task",
+				description: "Test Description",
+				dueDate: new Date("2026-01-01").toISOString(),
+			});
+		});
+
+		it("should not allow an invalid due date, and create the task with the inputted due date", async () => {
+			write("2026-01-01");
+
+			await createTask(
+				"Invalid Due Date",
+				"202502-31",
+				"Test Description"
 			);
-		});
 
-		it("should not allow a task with an invalid due date", () => {
-			createTask("Invalid Due Date", "202502-31", "Test Description");
-			let tasks = getTasks();
-			expect(tasks).toHaveLength(0);
 			expect(console.error).toHaveBeenCalledWith("Invalid due date");
+
+			let tasks = getTasks();
+			expect(tasks).toHaveLength(1);
+			expect(tasks[0]).toEqual({
+				name: "Invalid Due Date",
+				description: "Test Description",
+				dueDate: new Date("2026-01-01").toISOString(),
+			});
 		});
 
-		it("should not allow a task with a due date in the past", () => {
-			createTask("Past Due Date", "2020-01-01", "Test Description");
+		it("should not allow a task with a due date in the past, and create the task with the inputted due date", async () => {
+			write("2026-01-01");
+			await createTask("Past Due Date", "2020-01-01", "Test Description");
 			let tasks = getTasks();
-			expect(tasks).toHaveLength(0);
+			expect(tasks).toHaveLength(1);
 			expect(console.error).toHaveBeenCalledWith(
 				"Due date must be in the future"
 			);
@@ -71,9 +97,7 @@ describe("taskService", () => {
 			createTask("Duplicate Task", "2026-01-01", "Test Description");
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
-			expect(console.error).toHaveBeenCalledWith(
-				"Task already exists"
-			);
+			expect(console.error).toHaveBeenCalledWith("Task already exists");
 		});
 
 		it("should not allow a task with an empty name", () => {
@@ -84,13 +108,11 @@ describe("taskService", () => {
 				"Task name cannot be empty"
 			);
 		});
-
-		// TODO: take into account promptForProperty()
 	});
 
 	describe("deleteTask", () => {
 		beforeEach(() => {
-			writeFile(
+			writeFileSync(
 				"./database/tasks.json",
 				JSON.stringify(
 					[
@@ -122,7 +144,10 @@ describe("taskService", () => {
 
 		afterEach(() => {
 			jest.restoreAllMocks();
-			writeFile("./database/tasks.json", JSON.stringify([], null, "\t"));
+			writeFileSync(
+				"./database/tasks.json",
+				JSON.stringify([], null, "\t")
+			);
 		});
 
 		it("should delete a task", () => {
