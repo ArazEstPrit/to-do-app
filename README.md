@@ -8,7 +8,7 @@ Clone this repository and run `npm install` to install the dependencies. Ensure 
 
 ## Usage
 
-To use the app, run `npm start` (or `node main.js`) along with one of these commands:
+To use the app, run `npm start` along with one of these commands:
 
 * `add <task name> [due date] [description] [tag]` - Adds a task with the specified parameters. The due date can be in any of the formats below:
   * `YYYY-MM-DD` (e.g., `2024-06-05`)
