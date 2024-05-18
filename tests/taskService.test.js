@@ -52,13 +52,20 @@ describe("taskService", () => {
 		});
 
 		it("should create a new task", () => {
-			createTask("Test Task", "2026-01-01", "Test Description");
+			createTask(
+				"Test Task",
+				"2026-01-01",
+				"Test Description",
+				" tag1 ",
+				" tag2 "
+			);
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(tasks[0]).toEqual({
 				name: "Test Task",
 				description: "Test Description",
 				dueDate: new Date("2026-01-01").toISOString(),
+				tags: ["tag1", "tag2"],
 			});
 		});
 
@@ -68,7 +75,8 @@ describe("taskService", () => {
 			await createTask(
 				"Invalid Due Date",
 				"202502-31",
-				"Test Description"
+				"Test Description",
+				"tag1"
 			);
 
 			expect(console.error).toHaveBeenCalledWith("Invalid due date");
@@ -79,12 +87,18 @@ describe("taskService", () => {
 				name: "Invalid Due Date",
 				description: "Test Description",
 				dueDate: new Date("2026-01-01").toISOString(),
+				tags: ["tag1"],
 			});
 		});
 
 		it("should not allow a task with a due date in the past, and create the task with the inputted due date", async () => {
 			write("2026-01-01");
-			await createTask("Past Due Date", "2020-01-01", "Test Description");
+			await createTask(
+				"Past Due Date",
+				"2020-01-01",
+				"Test Description",
+				"tag1"
+			);
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(console.error).toHaveBeenCalledWith(
@@ -93,8 +107,18 @@ describe("taskService", () => {
 		});
 
 		it("should not allow a duplicate task", () => {
-			createTask("Duplicate Task", "2026-01-01", "Test Description");
-			createTask("Duplicate Task", "2026-01-01", "Test Description");
+			createTask(
+				"Duplicate Task",
+				"2026-01-01",
+				"Test Description",
+				"tag1"
+			);
+			createTask(
+				"Duplicate Task",
+				"2026-01-01",
+				"Test Description",
+				"tag1"
+			);
 			let tasks = getTasks();
 			expect(tasks).toHaveLength(1);
 			expect(console.error).toHaveBeenCalledWith("Task already exists");
@@ -107,6 +131,20 @@ describe("taskService", () => {
 			expect(console.error).toHaveBeenCalledWith(
 				"Task name cannot be empty"
 			);
+		});
+
+		it("should add inputted tags to task", async () => {
+			write("  tag1 tag2   tag3  ");
+
+			await createTask("Test Task", "2026-01-01", "Test Description");
+
+			let tasks = getTasks();
+			expect(tasks[0]).toEqual({
+				name: "Test Task",
+				description: "Test Description",
+				dueDate: new Date("2026-01-01").toISOString(),
+				tags: ["tag1", "tag2", "tag3"],
+			});
 		});
 	});
 

@@ -8,9 +8,9 @@ import {
 import { readFile, writeFile } from "./fileService.js";
 
 /**
- * Creates a new task with the provided name, due date, and description. If any
- * of the parameters are not provided or invalid, the user will be prompted for
- * them.
+ * Creates a new task with the provided name, due date, description, and tags.
+ * If any of the parameters are not provided or invalid, the user will be
+ * prompted for them.
  *
  * The due date is invalid if it is in the past, or if new Date(dueDate) returns
  * "Invalid Date" (better date parsing is planned). Two tasks cannot have the
@@ -22,7 +22,7 @@ import { readFile, writeFile } from "./fileService.js";
  * @param {string} dueDate - The due date of the task in a valid date format.
  * @param {string} description - The description of the task.
  */
-export async function createTask(name, dueDate, description) {
+export async function createTask(name, dueDate, description, ...tags) {
 	// Validates the task name.
 	function isNameValid(name) {
 		if (name.trim() == "") {
@@ -67,11 +67,17 @@ export async function createTask(name, dueDate, description) {
 		description?.trim() ||
 		(await promptForProperty("Description (optional)"));
 
+	let taskTags =
+		tags.length != 0
+			? tags.map(t => t.trim())
+			: (await promptForProperty("Tags (optional)")).trim().split(" ");
+
+	taskTags = taskTags.filter(t => t != "");
+	
 	log("");
-
+	
 	// Creates a new Task with the provided information.
-	let task = new Task(taskName, taskDueDate, taskDescription);
-
+	let task = new Task(taskName, taskDueDate, taskDescription, taskTags);
 	
 	// Checks if the new task conflicts with any existing tasks.
 	let data = getTasks();
@@ -100,7 +106,9 @@ export async function createTask(name, dueDate, description) {
 					DATE_FORMAT
 				)}`
 				: ""
-		}${task.description ? `\nDescription: ${task.description}` : ""}`
+		}${task.description ? `\nDescription: ${task.description}` : ""}${
+			task.tags.length != 0 ? `\nTags: ${task.tags.join(", ")}` : ""
+		}`
 	);
 }
 

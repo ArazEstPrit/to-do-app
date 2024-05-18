@@ -20,7 +20,7 @@ I'm outlining these as prerequisites for progressing to each version.
 - [ ] Task Details:
   - [x] Description
   - [ ] Customizable task statuses
-  - [ ] Tags
+  - [x] Tags
   - [ ] Priority score
     - [ ] Effort: 1-6
     - [ ] Importance: 1-6
@@ -30,7 +30,7 @@ I'm outlining these as prerequisites for progressing to each version.
   - [ ] Edit Task
   - [ ] Complete task (without deletion)
   - [ ] View Tasks
-    - [ ] By tags
+    - [x] By tags
     - [ ] Sort Priority score
 - [ ] Migrate to SQLite database?
 - [ ] UI:

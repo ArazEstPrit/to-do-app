@@ -17,7 +17,7 @@ export const DATE_FORMAT = {
 	year: "numeric",
 };
 
-export function viewTasks() {
+export function viewTasks(tagFilter) {
 	let tasks = getTasks()
 		.sort((a, b) => Date.parse(b.dueDate || 0) - Date.parse(a.dueDate || 0))
 		.map(task => ({
@@ -28,7 +28,8 @@ export function viewTasks() {
 					DATE_FORMAT
 				)
 				: "",
-		}));
+		}))
+		.filter(task => !tagFilter || task.tags.includes(tagFilter));
 
 	if (tasks.length === 0) {
 		log("No tasks found");
