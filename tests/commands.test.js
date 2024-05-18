@@ -1,6 +1,6 @@
-import { getCommand } from "../controllers/commands.js";
-import { createTask, deleteTask } from "../services/taskService.js";
-import { viewTasks } from "../views/consoleView.js";
+const { getCommand } = require("../src/controllers/commands");
+const { createTask, deleteTask } = require("../src/services/taskService");
+const { viewTasks } = require("../src/views/consoleView");
 
 describe("Command controller", () => {
 	it("should return a command given a keyword", () => {
@@ -44,3 +44,4 @@ describe("Command controller", () => {
 		expect(command).toBeUndefined();
 	});
 });
+

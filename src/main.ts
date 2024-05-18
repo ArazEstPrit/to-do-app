@@ -1,5 +1,5 @@
-import { log } from "./views/consoleView.js";
-import { getCommand } from "./controllers/commands.js";
+import { log } from "./views/consoleView";
+import { getCommand } from "./controllers/commands";
 
 let parameters = process.argv.slice(2);
 

@@ -1,32 +1,32 @@
-import { getTasks } from "../services/taskService.js";
+import { getTasks } from "../services/taskService";
 import readline from "readline";
 
 // These two functions are very simple for now, but I'll expand on them later.
-export function log(msg) {
+export function log(msg: string) {
 	console.log(msg);
 }
 
-export function logError(msg) {
+export function logError(msg: string) {
 	console.error(msg);
 }
 
-export const DATE_FORMAT = {
+export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 	weekday: "short",
 	day: "2-digit",
 	month: "short",
 	year: "numeric",
 };
 
-export function viewTasks(tagFilter) {
+export function viewTasks(tagFilter: any) {
 	let tasks = getTasks()
 		.sort((a, b) => Date.parse(b.dueDate || 0) - Date.parse(a.dueDate || 0))
 		.map(task => ({
 			...task,
 			dueDate: task.dueDate
 				? new Date(task.dueDate).toLocaleDateString(
-					undefined,
-					DATE_FORMAT
-				)
+						undefined,
+						DATE_FORMAT
+				  )
 				: "",
 		}))
 		.filter(task => !tagFilter || task.tags.includes(tagFilter));
@@ -46,7 +46,10 @@ export function viewTasks(tagFilter) {
  * and returns a boolean indicating whether the input is valid
  * @returns {Promise<string>} - The trimmed input
  */
-export async function promptForProperty(label, validate = () => true) {
+export async function promptForProperty(
+	label: string,
+	validate: Function = () => true
+): Promise<string> {
 	let rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
@@ -56,8 +59,8 @@ export async function promptForProperty(label, validate = () => true) {
 	 * Asks the user for input until the input is valid.
 	 * @returns {Promise<string>}
 	 */
-	let ask = async () => {
-		let input = await new Promise(resolve =>
+	let ask = async (): Promise<string> => {
+		let input: string = await new Promise(resolve =>
 			rl.question(`? ${label}: `, resolve)
 		);
 		if (validate(input)) {
@@ -71,7 +74,6 @@ export async function promptForProperty(label, validate = () => true) {
 	return await ask();
 }
 
-
 /**
  * Prompts the user for multiple property values.
  *
@@ -82,7 +84,9 @@ export async function promptForProperty(label, validate = () => true) {
  * @returns {Promise<object>} - An object with the same keys as the input
  * `propertyDefinitions` array and the trimmed user input values
  */
-export async function promptForProperties(propertyDefinitions) {
+export async function promptForProperties(
+	propertyDefinitions: any
+): Promise<object> {
 	let properties = {};
 	for (let { name, condition } of propertyDefinitions) {
 		properties[name] = await promptForProperty(name, condition);

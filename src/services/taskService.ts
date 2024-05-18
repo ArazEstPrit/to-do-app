@@ -1,11 +1,11 @@
-import { Task } from "../models/task.js";
+import { Task } from "../models/task";
 import {
 	DATE_FORMAT,
 	log,
 	logError,
 	promptForProperty,
-} from "../views/consoleView.js";
-import { readFile, writeFile } from "./fileService.js";
+} from "../views/consoleView";
+import { readFile, writeFile } from "./fileService";
 
 /**
  * Creates a new task with the provided name, due date, description, and tags.
@@ -18,13 +18,14 @@ import { readFile, writeFile } from "./fileService.js";
  *
  * A task does not require a due date or description.
  *
- * @param {string} name - The name of the task.
- * @param {string} dueDate - The due date of the task in a valid date format.
- * @param {string} description - The description of the task.
+ * @param {string} [name] - The name of the task.
+ * @param {string} [dueDate] - The due date of the task in a valid date format.
+ * @param {string} [description] - The description of the task.
+ * @param {string[]} [tags] - The tags of the task.
  */
-export async function createTask(name, dueDate, description, ...tags) {
+export async function createTask(name?: string, dueDate?: string, description?: string, ...tags: string[]) {
 	// Validates the task name.
-	function isNameValid(name) {
+	function isNameValid(name: string) {
 		if (name.trim() == "") {
 			logError("Task name cannot be empty");
 			return false;
@@ -39,10 +40,10 @@ export async function createTask(name, dueDate, description, ...tags) {
 			: await promptForProperty("Task Name", isNameValid);
 
 	// Validates the due date.
-	function isDateValid(dueDate) {
+	function isDateValid(dueDate: string | number | Date) {
 		if (dueDate === "") {
 			return true;
-		} else if (new Date(dueDate) == "Invalid Date") {
+		} else if (new Date(dueDate).toString() == "Invalid Date") {
 			logError("Invalid due date");
 			return false;
 		} else if (new Date(dueDate) < new Date()) {
@@ -53,14 +54,14 @@ export async function createTask(name, dueDate, description, ...tags) {
 	}
 
 	// Prompts the user for the due date if it is not provided or invalid.
-	let taskDueDate =
+	let taskDueDate: any =
 		dueDate && isDateValid(dueDate)
 			? dueDate
 			: await promptForProperty("Due Date (optional)", isDateValid);
 
 	// Converts the due date to a Date object if it is not empty (to let users
 	// create tasks with no due date).
-	taskDueDate = taskDueDate ? new Date(taskDueDate) : "";
+	taskDueDate = taskDueDate ? new Date(taskDueDate) : null;
 
 	// Prompts the user for the task description if it is not provided.
 	let taskDescription =
@@ -117,9 +118,14 @@ export async function createTask(name, dueDate, description, ...tags) {
  *
  * @return {array} Sorted array of tasks based on due date.
  */
-export function getTasks() {
+export function getTasks(): Array<any> {
 	let tasks = JSON.parse(readFile("./database/tasks.json") || "[]");
-	return tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+	return tasks.sort(
+		(
+			a: { dueDate: string | Date },
+			b: { dueDate: string | Date }
+		) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+	);
 }
 
 /**
@@ -128,17 +134,17 @@ export function getTasks() {
  * @param {string} name - The name of the task to delete. If not provided, the
  *     user will be prompted for it.
  */
-export async function deleteTask(name) {
+export async function deleteTask(name: string) {
 	let tasks = getTasks();
 
 	// Finds the task to delete based on the provided name. If the user has
 	// multiple tasks with the same name, the one with the earliest due date
 	// will be deleted. Returns false if no matching task is found.
-	let getTaskToDelete = (name) => {
+	let getTaskToDelete = (name: string) => {
 		let tasksToDelete = tasks
 			.filter(task => task.name === name)
 			.sort(
-				(a, b) => new Date(b.dueDate || 0) - new Date(a.dueDate || 0)
+				(a, b) => new Date(b.dueDate || 0).getTime() - new Date(a.dueDate || 0).getTime()
 			);
 
 		if (tasksToDelete.length == 0) {

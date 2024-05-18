@@ -1,6 +1,5 @@
-import { existsSync } from "fs";
-import { readFile, writeFile } from "../services/fileService.js";
-import { rmSync } from "fs";
+const { existsSync, rmSync } = require("fs");
+const { writeFile, readFile } = require("../src/services/fileService");
 
 describe("fileService", () => {
 	describe("writeFile", () => {

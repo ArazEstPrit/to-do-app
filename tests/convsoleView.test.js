@@ -1,22 +1,12 @@
-import { promptForProperty } from "../views/consoleView.js";
-import { stdin as mockStdin } from "mock-stdin";
+const { promptForProperty } = require("../src/views/consoleView");
+const stdin = require("mock-stdin").stdin();
 
 describe("promptForProperty", () => {
-	let stdin;
-
 	function write(msg) {
 		process.nextTick(() => {
 			stdin.send(msg + "\r");
 		});
 	}
-
-	beforeEach(() => {
-		stdin = mockStdin();
-	});
-
-	afterEach(() => {
-		stdin.end();
-	});
 
 	it("should return the user input when no condition is provided", async () => {
 		write("test input");

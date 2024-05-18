@@ -1,5 +1,5 @@
 import { dirname } from "path";
-import { logError } from "../views/consoleView.js";
+import { logError } from "../views/consoleView";
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
  * @param {string} filePath - The path to the file to be read.
  * @returns {string|null} The contents of the file, or null if the file does not exist or could not be read.
  */
-export function readFile(filePath) {
+export function readFile(filePath: string): string | null {
 	let data = null;
 
 	// If the file exists, try to read it
@@ -33,7 +33,7 @@ export function readFile(filePath) {
  * @param {string} filePath - The path to the file to be written.
  * @param {string} data - The data to be written to the file.
  */
-export function writeFile(filePath, data) {
+export function writeFile(filePath: string, data: string) {
 	// Get the directory of the file path
 	let dir = dirname(filePath);
 

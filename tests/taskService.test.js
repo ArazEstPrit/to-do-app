@@ -1,7 +1,6 @@
-import { jest } from "@jest/globals";
-import { writeFileSync, readFileSync, rmSync } from "fs";
-import { createTask, getTasks, deleteTask } from "../services/taskService.js";
-import { stdin as mockStdin } from "mock-stdin";
+const { writeFileSync, readFileSync, rmSync } = require("fs");
+const { createTask, getTasks, deleteTask } = require("../src/services/taskService");
+const stdin = require("mock-stdin").stdin();
 
 describe("taskService", () => {
 	const BACKUP_FILENAME = "./database/tasks.json.bak";
@@ -22,8 +21,6 @@ describe("taskService", () => {
 	});
 
 	describe("createTask", () => {
-		let stdin;
-
 		function write(msg) {
 			process.nextTick(() => {
 				stdin.send(msg + "\r");
@@ -38,8 +35,6 @@ describe("taskService", () => {
 
 			jest.spyOn(console, "log");
 			jest.spyOn(console, "error");
-
-			stdin = mockStdin();
 		});
 
 		afterEach(() => {
@@ -48,7 +43,6 @@ describe("taskService", () => {
 				"./database/tasks.json",
 				JSON.stringify([], null, "\t")
 			);
-			stdin.end();
 		});
 
 		it("should create a new task", () => {

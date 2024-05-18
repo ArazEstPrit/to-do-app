@@ -1,5 +1,10 @@
-import { createTask, deleteTask } from "../services/taskService.js";
-import { viewTasks } from "../views/consoleView.js";
+import { createTask, deleteTask } from "../services/taskService";
+import { viewTasks } from "../views/consoleView";
+
+interface Command {
+  keywords: string[];
+  action: (...args: string[]) => void;
+}
 
 const COMMANDS = [
 	{
@@ -16,6 +21,6 @@ const COMMANDS = [
 	},
 ];
 
-export function getCommand(keyword) {
+export function getCommand(keyword: string): Command | undefined {
 	return COMMANDS.find(command => command.keywords.includes(keyword));
 }
