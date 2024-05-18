@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { log } from "./views/consoleView";
 import { getCommand } from "./controllers/commands";
 
