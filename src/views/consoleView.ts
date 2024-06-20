@@ -1,5 +1,42 @@
-import { getTasks } from "../services/taskService";
-import readline from "readline";
+// import { getTasks } from "../services/taskService";
+import readline from "readline/promises";
+import Task from "../models/task";
+import taskService from "../services/taskService";
+
+const styleCodes: { [key: string]: string } = {
+	bold: "1",
+	dim: "2",
+	italic: "3",
+	underline: "4",
+	blink: "5",
+	reverse: "7",
+	strikethrough: "9",
+	black: "30",
+	red: "31",
+	green: "32",
+	yellow: "33",
+	blue: "34",
+	purple: "35",
+	cyan: "36",
+	lightGray: "37",
+	gray: "90",
+	lightRed: "91",
+	lightGreen: "92",
+	lightYellow: "93",
+	lightBlue: "94",
+	lightPurple: "95",
+	lightCyan: "96",
+	white: "97",
+};
+
+function formatText(text: string, ...styles: string[]): string {
+	const selectedStyles = styles
+		.map(style => styleCodes[style])
+		.filter(Boolean)
+		.join(";");
+
+	return `\x1b[${selectedStyles}m${text}\x1b[0m`;
+}
 
 // These two functions are very simple for now, but I'll expand on them later.
 export function log(msg: string) {
@@ -7,7 +44,7 @@ export function log(msg: string) {
 }
 
 export function logError(msg: string) {
-	console.error(msg);
+	console.error(formatText(msg, "lightRed"));
 }
 
 export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
@@ -17,9 +54,9 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 };
 
-export function viewTasks(tagFilter: any) {
-	let tasks = getTasks()
-		.sort((a, b) => Date.parse(b.dueDate || 0) - Date.parse(a.dueDate || 0))
+export function viewTasks(tagFilter: string | undefined) {
+	const tasks = taskService
+		.getTasks()
 		.map(task => ({
 			...task,
 			dueDate: task.dueDate
@@ -38,60 +75,72 @@ export function viewTasks(tagFilter: any) {
 	}
 }
 
-/**
- * Prompts the user for a property value.
- *
- * @param {string} label - The label to display before the input
- * @param {function} [validate=() => true] - A function that takes the input
- * and returns a boolean indicating whether the input is valid
- * @returns {Promise<string>} - The trimmed input
- */
-export async function promptForProperty(
-	label: string,
-	validate: Function = () => true
-): Promise<string> {
-	let rl = readline.createInterface({
+export interface inputDefinition {
+	name: string;
+	char?: string;
+	condition?: (value: string) => boolean | string;
+	optional?: boolean;
+}
+
+export async function prompt(prompt: inputDefinition): Promise<string> {
+	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
+		terminal: false,
 	});
 
-	/**
-	 * Asks the user for input until the input is valid.
-	 * @returns {Promise<string>}
-	 */
-	let ask = async (): Promise<string> => {
-		let input: string = await new Promise(resolve =>
-			rl.question(`? ${label}: `, resolve)
-		);
-		if (validate(input)) {
+	async function ask(): Promise<string> {
+		const input: string = (
+			await rl.question(
+				formatText(`? ${prompt.name}: `, "italic", "gray")
+			)
+		).trim();
+
+		let valid: boolean | string = prompt.condition
+			? prompt.condition(input)
+			: true;
+
+		if (prompt.optional && input === "") {
+			valid = true;
+		}
+
+		if (valid === true) {
 			rl.close();
-			return input.trim();
+			process.stdout.clearLine(1);
+			return input;
 		} else {
+			logError(valid as string);
+
+			process.stdout.moveCursor(0, -2);
+			process.stdout.clearLine(1);
+
 			return ask();
 		}
-	};
+	}
 
 	return await ask();
 }
 
-/**
- * Prompts the user for multiple property values.
- *
- * @param {object[]} propertyDefinitions - An array of objects, each with a
- * `name` property indicating the name of the property and an optional
- * `condition` property indicating a function that takes the input and returns
- * a boolean indicating whether the input is valid
- * @returns {Promise<object>} - An object with the same keys as the input
- * `propertyDefinitions` array and the trimmed user input values
- */
-export async function promptForProperties(
-	propertyDefinitions: any
-): Promise<object> {
-	let properties = {};
-	for (let { name, condition } of propertyDefinitions) {
-		properties[name] = await promptForProperty(name, condition);
-	}
+export function formatTask({ name, dueDate, description, tags }: Task): string {
+	const formattedName = formatText(name, "bold");
+	const formattedDescription = description ?? "";
+	const formattedDueDate = dueDate
+		? formatText(
+				dueDate.toLocaleDateString(undefined, DATE_FORMAT),
+				"italic"
+		  )
+		: "";
+	const formattedTags = `[${
+		tags.map(tag => formatText(tag, "lightCyan")).join(", ") ||
+		formatText("no tags", "dim")
+	}]`;
 
-	log(""); // for new line;
-	return properties;
+	return [
+		formattedName,
+		formattedDescription,
+		formattedDueDate,
+		formattedTags,
+	]
+		.filter(detail => detail !== "")
+		.join("\n");
 }
