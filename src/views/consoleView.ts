@@ -144,7 +144,13 @@ export function formatTask(task: Task): string {
 		" - " +
 		formatText("" + task.priorityScore, "lightGreen");
 
-	return [name, description, dueDate, tags, score]
+	return [
+		name,
+		description,
+		dueDate,
+		tags,
+		task.effort || task.importance ? score : "",
+	]
 		.filter(detail => detail !== "")
 		.join("\n");
 }
