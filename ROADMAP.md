@@ -21,17 +21,17 @@ I'm outlining these as prerequisites for progressing to each version.
   - [x] Description
   - [ ] Customizable task statuses
   - [x] Tags
-  - [ ] Priority score
-    - [ ] Effort: 1-6
-    - [ ] Importance: 1-6
-    - [ ] Score calculated: Importance/Effort
-    - [ ] Due date closer -> higher priority
+  - [x] Priority score
+    - [x] Effort: 1-6
+    - [x] Importance: 1-6
+    - [x] Score calculated: Importance/Effort
+    - [x] Due date closer -> higher priority
 - [ ] Task Operations:
   - [ ] Edit Task
   - [ ] Complete task (without deletion)
-  - [ ] View Tasks
+  - [x] View Tasks
     - [x] By tags
-    - [ ] Sort Priority score
+    - [x] Sort Priority score
 - [ ] Migrate to SQLite database?
 - [ ] UI:
   - [ ] CLI improvements

@@ -7,7 +7,9 @@ class TaskController {
 		name: string,
 		dueDate: string | null,
 		description: string,
-		tags: string
+		tags: string,
+		effort: string,
+		importance: string
 	) {
 		const trimmedTags = tags ? tags.trim().split(" ").filter(Boolean) : [];
 		const uniqueTags = Array.from(new Set(trimmedTags));
@@ -22,7 +24,15 @@ class TaskController {
 			return;
 		}
 
-		const task = new Task(name, taskDate, description || null, uniqueTags);
+		const task = new Task(
+			name,
+			taskDate,
+			description || "",
+			uniqueTags,
+			parseInt(effort),
+			parseInt(importance),
+			0
+		);
 
 		taskService.addTask(task);
 

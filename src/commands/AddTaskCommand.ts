@@ -7,7 +7,14 @@ export default new Command(
 	"Add a new task",
 	["a"],
 	TaskService.taskDetails,
-	({ name, dueDate, description, tags }) => {
-		TaskController.createTask(name, dueDate, description, tags);
+	({ name, dueDate, description, tags, effort, importance }) => {
+		TaskController.createTask(
+			name,
+			dueDate,
+			description,
+			tags,
+			effort,
+			importance
+		);
 	}
 );

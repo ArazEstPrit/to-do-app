@@ -121,26 +121,30 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 	return await ask();
 }
 
-export function formatTask({ name, dueDate, description, tags }: Task): string {
-	const formattedName = formatText(name, "bold");
-	const formattedDescription = description ?? "";
-	const formattedDueDate = dueDate
+export function formatTask(task: Task): string {
+	const name = formatText(task.name, "bold");
+	const description = task.description ?? "";
+	const dueDate = task.dueDate
 		? formatText(
-				dueDate.toLocaleDateString(undefined, DATE_FORMAT),
+				task.dueDate.toLocaleDateString(undefined, DATE_FORMAT),
 				"italic"
 		  )
 		: "";
-	const formattedTags = `[${
-		tags.map(tag => formatText(tag, "lightCyan")).join(", ") ||
-		formatText("no tags", "dim")
-	}]`;
+	const tags =
+		task.tags.length > 0
+			? `[${task.tags
+					.map(tag => formatText(tag, "lightCyan"))
+					.join(", ")}]`
+			: formatText("no tags", "dim");
 
-	return [
-		formattedName,
-		formattedDescription,
-		formattedDueDate,
-		formattedTags,
-	]
+	const score =
+		formatText("" + task.effort, "lightRed") +
+		":" +
+		formatText("" + task.importance, "cyan") +
+		" - " +
+		formatText("" + task.priorityScore, "lightGreen");
+
+	return [name, description, dueDate, tags, score]
 		.filter(detail => detail !== "")
 		.join("\n");
 }

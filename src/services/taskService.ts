@@ -37,6 +37,32 @@ class TaskService {
 			char: "t",
 			optional: true,
 		},
+		{
+			name: "effort",
+			char: "e",
+			condition: (effort: string): boolean | string => {
+				const parsedEffort = parseInt(effort);
+				return isNaN(parsedEffort)
+					? "Effort must be a number"
+					: parsedEffort > 0 && parsedEffort <= 6
+					  ? true
+					  : "Effort must be between 1 and 6";
+			},
+			optional: true,
+		},
+		{
+			name: "importance",
+			char: "i",
+			condition: (importance: string): boolean | string => {
+				const parsedImportance = parseInt(importance);
+				return isNaN(parsedImportance)
+					? "Importance must be a number"
+					: parsedImportance > 0 && parsedImportance <= 6
+					  ? true
+					  : "Importance must be between 1 and 6";
+			},
+			optional: true,
+		},
 	];
 
 	constructor() {
@@ -48,27 +74,52 @@ class TaskService {
 		this.sortTasks();
 	}
 
+	public calculatePriorityScore(task: Task): number {
+		const daysUntilDueDate = Math.ceil(
+			(new Date(task.dueDate).getTime() - new Date().getTime()) /
+				1000 /
+				3600 /
+				24
+		);
+		task.priorityScore = Math.round(
+			(2 * (task.importance ?? 3)) /
+				Math.pow(
+					daysUntilDueDate > 0 ? daysUntilDueDate : 1,
+					1 / (task.effort ?? 3)
+				)
+		);
+
+		return task.priorityScore;
+	}
+
+	private updatePriorityScore() {
+		this.tasks.map(
+			task => (task.priorityScore = this.calculatePriorityScore(task))
+		);
+	}
+
 	private saveTasks() {
 		this.sortTasks();
+		this.updatePriorityScore();
 		writeFile(TASK_FILE, JSON.stringify(this.tasks, null, "\t"));
 	}
 
 	private sortTasks() {
 		this.tasks.sort(
-			(a: { dueDate: Date | null }, b: { dueDate: Date | null }) =>
-				(new Date(b.dueDate).getTime() || 0) -
-				(new Date(a.dueDate).getTime() || 0)
+			(a: Task, b: Task) => b.priorityScore - a.priorityScore
 		);
 	}
 
 	public getTasks(): Task[] {
 		this.sortTasks();
+		this.updatePriorityScore();
 		return this.tasks;
 	}
 
 	public addTask(task: Task): Task {
 		this.tasks.push(task);
 		this.saveTasks();
+		task.priorityScore = this.calculatePriorityScore(task);
 		return task;
 	}
 
