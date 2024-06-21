@@ -23,7 +23,7 @@ To use the app, run `todo` along with one of these commands:
     * `Month DD YYYY` (e.g., `June 5 2024`)
     * `DD Month YYYY` (e.g., `5 June 2024`)
     * For more info, check the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format)
-  * the effort and importance parameters are a measure (from 1 to 6) of how important a task is, as well as how much effort is needed to complete the task. These values are used to calculate a *priority* score, which increases as the due date comes closer. It is calculated using the following expression: $\frac{2b}{\sqrt[a]{ d }}$, where $b$ is the importance, $a$ effort, and $d$ days until the deadline. If you want to see a graph of priority score over time, check this [Desmos graph](https://www.desmos.com/calculator/tawrfjp6m4)
+  * the effort and importance parameters are a measure (from 1 to 6) of how important a task is, as well as how much effort is needed to complete the task. These values are used to calculate a *priority* score, which increases as the due date comes closer. It is calculated using the following expression: $\dfrac{2b}{\sqrt[a]{ d }}$, where $b$ is the importance, $a$ effort, and $d$ days until the deadline. If you want to see a graph of priority score over time, check this [Desmos graph](https://www.desmos.com/calculator/tawrfjp6m4)
 * `complete|delete --name <task name>`
   * You can also use the short version: `-n <task name>`
   * Removes the task with that name. If multiple tasks have the same name, it will remove the one with the earliest due date.
