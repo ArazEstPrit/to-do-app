@@ -1,4 +1,5 @@
 import taskController from "../controllers/taskController";
+import taskService from "../services/taskService";
 import Command from "./Command";
 
 export default new Command(
@@ -6,14 +7,18 @@ export default new Command(
 	"Delete a task",
 	["d", "c", "complete"],
 	[
+		taskService.taskDetails[0],
 		{
-			name: "name",
-			char: "n",
-			condition: (name: string): boolean | string =>
-				name.trim() ? true : "Task name cannot be empty",
+			name: "dueDate",
+			char: "d",
+			optional: true,
+			condition: (date: string): boolean | string =>
+				new Date(date).toString() === "Invalid Date"
+					? "Invalid date"
+					: true,
 		},
 	],
-	({ name }) => {
-		taskController.deleteTask(name);
+	({ name, dueDate }) => {
+		taskController.deleteTask(name, dueDate);
 	}
 );

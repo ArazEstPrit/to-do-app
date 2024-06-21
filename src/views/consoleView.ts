@@ -54,7 +54,7 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 };
 
-export function viewTasks(tagFilter: string | undefined) {
+export function listTasks(tagFilter: string | undefined) {
 	const tasks = taskService
 		.getTasks()
 		.map(task => ({
@@ -126,7 +126,10 @@ export function formatTask(task: Task): string {
 	const description = task.description ?? "";
 	const dueDate = task.dueDate
 		? formatText(
-				task.dueDate.toLocaleDateString(undefined, DATE_FORMAT),
+				new Date(task.dueDate).toLocaleDateString(
+					undefined,
+					DATE_FORMAT
+				),
 				"italic"
 		  )
 		: "";

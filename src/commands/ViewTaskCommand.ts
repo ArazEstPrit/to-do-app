@@ -1,16 +1,31 @@
-import { viewTasks } from "../views/consoleView";
+import taskController from "../controllers/taskController";
+import taskService from "../services/taskService";
+import { formatTask } from "../views/consoleView";
 import Command from "./Command";
 
 export default new Command(
 	"view",
-	"View all tasks, or all tags with a specific tag",
+	"View a specified task",
 	["v"],
 	[
+		taskService.taskDetails[0],
 		{
-			name: "tag",
-			char: "t",
+			name: "dueDate",
+			char: "d",
 			optional: true,
+			condition: (date: string): boolean | string =>
+				new Date(date).toString() === "Invalid Date"
+					? "Invalid date"
+					: true,
 		},
 	],
-	({ tag }) => viewTasks(tag)
+	({ name, dueDate }) => {
+		const task = taskController.findTask(name, dueDate);
+
+		if (!task) {
+			return;
+		}
+
+		console.log(formatTask(task));
+	}
 );

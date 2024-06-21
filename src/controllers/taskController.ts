@@ -39,18 +39,34 @@ class TaskController {
 		log("Task created:\n" + formatTask(task));
 	}
 
-	deleteTask(taskName: string) {
+	deleteTask(taskName: string, dueDate: string | null) {
+		const task = this.findTask(taskName, dueDate ?? undefined);
+
+		if (!task) {
+			return;
+		}
+
+		taskService.deleteTask(task);
+		log(`Task "${taskName}" deleted`);
+	}
+
+	findTask(taskName: string, dueDate?: string): Task | undefined {
 		const task = taskService
 			.getTasks()
-			.find(task => task.name === taskName);
+			.find(
+				task =>
+					task.name === taskName &&
+					(dueDate
+					? new Date(task.dueDate).getTime() === new Date(dueDate).getTime()
+						: true)
+			);
 
 		if (!task) {
 			logError(`Task "${taskName}" not found`);
 			return;
 		}
 
-		taskService.deleteTask(task);
-		log(`Task "${taskName}" deleted`);
+		return task;
 	}
 }
 

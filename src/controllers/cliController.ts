@@ -1,6 +1,7 @@
 import AddTaskCommand from "../commands/AddTaskCommand";
 import Command from "../commands/Command";
 import DeleteTaskCommand from "../commands/DeleteTaskCommand";
+import ListTasksCommand from "../commands/ListTasksCommand";
 import ViewTaskCommand from "../commands/ViewTaskCommand";
 import { logError } from "../views/consoleView";
 
@@ -9,6 +10,7 @@ class CliController {
 		AddTaskCommand,
 		ViewTaskCommand,
 		DeleteTaskCommand,
+		ListTasksCommand,
 	];
 
 	run(args: string[]) {
