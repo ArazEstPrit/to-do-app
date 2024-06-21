@@ -100,11 +100,11 @@ class TaskService {
 
 	private saveTasks() {
 		this.sortTasks();
-		this.updatePriorityScore();
 		writeFile(TASK_FILE, JSON.stringify(this.tasks, null, "\t"));
 	}
 
 	private sortTasks() {
+		this.updatePriorityScore();
 		this.tasks.sort(
 			(a: Task, b: Task) => b.priorityScore - a.priorityScore
 		);
@@ -112,7 +112,6 @@ class TaskService {
 
 	public getTasks(): Task[] {
 		this.sortTasks();
-		this.updatePriorityScore();
 		return this.tasks;
 	}
 
