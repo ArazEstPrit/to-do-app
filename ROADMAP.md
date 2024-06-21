@@ -35,6 +35,7 @@ I'm outlining these as prerequisites for progressing to each version.
 - [ ] Migrate to SQLite database?
 - [ ] UI:
   - [ ] CLI improvements
+    - [ ] Autocomplete
   - [ ] Basic GUI - web app (use React?)
 
 ## 2.0.0
