@@ -96,25 +96,34 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 			)
 		).trim();
 
-		let valid: boolean | string = prompt.condition
+		if (validate(input)) {
+			return input;
+		} else {
+			return await ask();
+		}
+	}
+
+	function validate(input: string): boolean {
+		const validationResult = prompt.condition
 			? prompt.condition(input)
 			: true;
 
-		if (prompt.optional && input === "") {
-			valid = true;
-		}
+		const isSkipped = prompt.optional && input === "";
 
-		if (valid === true) {
+		const isValid = validationResult === true || isSkipped;
+
+		if (isValid) {
 			rl.close();
 			process.stdout.clearLine(1);
-			return input;
+			return true;
 		} else {
-			logError(valid as string);
+			process.stderr.clearLine(1);
+			logError(validationResult as string);
 
 			process.stdout.moveCursor(0, -2);
 			process.stdout.clearLine(1);
 
-			return ask();
+			return false;
 		}
 	}
 
