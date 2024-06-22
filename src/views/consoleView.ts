@@ -80,30 +80,47 @@ export interface inputDefinition {
 	char?: string;
 	condition?: (value: string) => boolean | string;
 	optional?: boolean;
+	default?: string;
 }
 
 export async function prompt(prompt: inputDefinition): Promise<string> {
+	process.stdout.clearLine(1);
 	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
 		terminal: false,
 	});
 
-	async function ask(): Promise<string> {
-		const input: string = (
-			await rl.question(
-				formatText(`? ${prompt.name}: `, "italic", "gray")
-			)
-		).trim();
+	async function askForInput(): Promise<string> {
+		const input = (await rl.question(buildPromptText())).trim();
 
-		if (validate(input)) {
-			return input;
-		} else {
-			return await ask();
+		if (prompt.default && input === "") {
+			return prompt.default;
 		}
+
+		return input;
 	}
 
-	function validate(input: string): boolean {
+	function buildPromptText(): string {
+		const formattedName = formatText(prompt.name, "italic", "gray");
+		const formattedOptionalText = formatText(
+			prompt.optional ? " (optional)" : "",
+			"italic",
+			"dim",
+			"gray"
+		);
+		const formattedDefaultText = prompt.default
+			? formatText(` [${prompt.default}]`, "italic", "dim", "gray")
+			: "";
+		const formattedPromptText =
+			formattedName +
+			formattedOptionalText +
+			formattedDefaultText +
+			formatText(": ", "italic", "gray");
+		return formattedPromptText;
+	}
+
+	async function validateInput(input: string): Promise<string> {
 		const validationResult = prompt.condition
 			? prompt.condition(input)
 			: true;
@@ -114,8 +131,7 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 
 		if (isValid) {
 			rl.close();
-			process.stdout.clearLine(1);
-			return true;
+			return input;
 		} else {
 			process.stderr.clearLine(1);
 			logError(validationResult as string);
@@ -123,11 +139,11 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 			process.stdout.moveCursor(0, -2);
 			process.stdout.clearLine(1);
 
-			return false;
+			return await askForInput();
 		}
 	}
 
-	return await ask();
+	return await validateInput(await askForInput());
 }
 
 export function formatTask(task: Task): string {
