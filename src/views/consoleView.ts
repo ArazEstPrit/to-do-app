@@ -143,7 +143,7 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 			process.stdout.moveCursor(0, -2);
 			process.stdout.clearLine(1);
 
-			return await askForInput();
+			return await validateInput(await askForInput());
 		}
 	}
 
