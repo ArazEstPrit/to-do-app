@@ -1,4 +1,5 @@
 export default class Task {
+	public id: number;
 	constructor(
 		public name: string,
 		public dueDate: Date | null,

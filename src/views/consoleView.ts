@@ -66,9 +66,13 @@ export function listTasks(tagFilter: string | undefined) {
 				  )
 				: "",
 		}))
-		.filter(task => !tagFilter || task.tags.includes(tagFilter));
+		.filter(task => !tagFilter || task.tags.includes(tagFilter))
+		.reduce((acc, { id, ...x }) => {
+			acc[id] = x;
+			return acc;
+		}, {});
 
-	if (tasks.length === 0) {
+	if (Object.keys(tasks).length === 0) {
 		log("No tasks found");
 	} else {
 		console.table(tasks);
@@ -148,6 +152,7 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 
 export function formatTask(task: Task): string {
 	const name = formatText(task.name, "bold");
+	const id = formatText("#" + task.id.toString(), "gray", "italic");
 	const description = task.description ?? "";
 	const dueDate = task.dueDate
 		? formatText(
@@ -173,7 +178,7 @@ export function formatTask(task: Task): string {
 		formatText("" + task.priorityScore, "lightGreen");
 
 	return [
-		name,
+		[name, id].join(" "),
 		description,
 		dueDate,
 		tags,

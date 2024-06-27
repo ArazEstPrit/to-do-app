@@ -71,6 +71,14 @@ class TaskService {
 
 	private loadTasks() {
 		this.tasks = JSON.parse(readFile(TASK_FILE) || "[]");
+
+		this.tasks = this.tasks.map(task => {
+			if (!task.id) {
+				task.id = this.generateId();
+			}
+			return task;
+		});
+
 		this.sortTasks();
 	}
 
@@ -116,10 +124,15 @@ class TaskService {
 	}
 
 	public addTask(task: Task): Task {
+		task.id = this.generateId();
 		this.tasks.push(task);
 		this.saveTasks();
 		task.priorityScore = this.calculatePriorityScore(task);
 		return task;
+	}
+
+	private generateId(): number {
+		return Math.max(...this.tasks.map(t => t.id || 0)) + 1;
 	}
 
 	public deleteTask(task: Task) {
