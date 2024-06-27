@@ -135,6 +135,7 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 
 		if (isValid) {
 			rl.close();
+			process.stdout.clearLine(1);
 			return input;
 		} else {
 			process.stderr.clearLine(1);
