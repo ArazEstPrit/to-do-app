@@ -7,20 +7,9 @@ export default new Command(
 	"view",
 	"View a specified task",
 	["v"],
-	[
-		taskService.taskDetails[0],
-		{
-			name: "dueDate",
-			char: "d",
-			optional: true,
-			condition: (date: string): boolean | string =>
-				new Date(date).toString() === "Invalid Date"
-					? "Invalid date"
-					: true,
-		},
-	],
-	({ name, dueDate }) => {
-		const task = taskController.findTask(name, dueDate);
+	[taskService.taskId],
+	({ id }) => {
+		const task = taskController.findTask(parseInt(id));
 
 		if (!task) {
 			return;

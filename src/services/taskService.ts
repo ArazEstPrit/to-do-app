@@ -21,7 +21,7 @@ class TaskService {
 				const parsedDate = new Date(date);
 				return parsedDate < new Date()
 					? "Due date must be in the future"
-					: parsedDate.toString() === "Invalid Date"
+					: isNaN(parsedDate.getTime())
 					  ? "Invalid date"
 					  : true;
 			},
@@ -64,6 +64,17 @@ class TaskService {
 			optional: true,
 		},
 	];
+
+	public readonly taskId: inputDefinition = {
+		name: "id",
+		char: "k",
+		condition: (id: string): boolean | string =>
+			!isNaN(parseInt(id))
+				? this.getTasks().find(t => t.id === parseInt(id)) === undefined
+					? "Task not found"
+					: true
+				: "Task ID must be a number",
+	};
 
 	constructor() {
 		this.loadTasks();
