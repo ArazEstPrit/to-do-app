@@ -1,6 +1,6 @@
 # To-Do App
 
-This is a simple to-do app for the command line. It allows you to add, remove, and view tasks.
+This is a command line-based to-do app that allows you to add, remove, edit, and view tasks.
 
 ## Installation
 
