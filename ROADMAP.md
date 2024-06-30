@@ -27,7 +27,7 @@ I'm outlining these as prerequisites for progressing to each version.
     - [x] Score calculated: Importance/Effort
     - [x] Due date closer -> higher priority
 - [ ] Task Operations:
-  - [ ] Edit Task
+  - [x] Edit Task
   - [ ] Complete task (without deletion)
   - [x] View Tasks
     - [x] By tags
