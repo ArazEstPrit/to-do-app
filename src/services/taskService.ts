@@ -143,7 +143,7 @@ class TaskService {
 	}
 
 	private generateId(): number {
-		return Math.max(...this.tasks.map(t => t.id || 0)) + 1;
+		return Math.max(...this.tasks.map(t => t.id || 0), 0) + 1;
 	}
 
 	public deleteTask(task: Task) {
@@ -151,6 +151,25 @@ class TaskService {
 			t => t.name !== task.name || t.dueDate !== task.dueDate
 		);
 		this.saveTasks();
+	}
+
+	public findTask(id: number): Task | undefined {
+		const task = this.tasks.find(task => task.id === id);
+
+		if (!task) {
+			return;
+		}
+
+		return task;
+	}
+
+	public editTask(id: number, newTask: Task) {
+		const task = this.findTask(id);
+		if (task) {
+			Object.assign(task, newTask);
+			this.saveTasks();
+		}
+		return task;
 	}
 }
 

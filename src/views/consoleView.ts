@@ -113,9 +113,10 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 			"dim",
 			"gray"
 		);
-		const formattedDefaultText = prompt.default
-			? formatText(` [${prompt.default}]`, "italic", "dim", "gray")
-			: "";
+		const formattedDefaultText =
+			prompt.default && prompt.default.length !== 0
+				? formatText(` [${prompt.default}]`, "italic", "dim", "gray")
+				: "";
 		const formattedPromptText =
 			formattedName +
 			formattedOptionalText +

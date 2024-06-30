@@ -1,4 +1,3 @@
-import taskController from "../controllers/taskController";
 import taskService from "../services/taskService";
 import { formatTask } from "../views/consoleView";
 import Command from "./Command";
@@ -9,7 +8,7 @@ export default new Command(
 	["v"],
 	[taskService.taskId],
 	({ id }) => {
-		const task = taskController.findTask(parseInt(id));
+		const task = taskService.findTask(parseInt(id));
 
 		if (!task) {
 			return;
