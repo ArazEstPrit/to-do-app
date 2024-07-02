@@ -5,7 +5,7 @@ import Command from "./Command";
 export default new Command(
 	"delete",
 	"Delete a task",
-	["d", "c", "complete"],
+	["complete", "d", "c"],
 	[taskService.taskId],
 	({ id }) => {
 		taskController.deleteTask(id);

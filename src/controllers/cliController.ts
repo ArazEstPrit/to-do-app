@@ -2,6 +2,7 @@ import AddTaskCommand from "../commands/AddTaskCommand";
 import Command from "../commands/Command";
 import DeleteTaskCommand from "../commands/DeleteTaskCommand";
 import EditTaskCommand from "../commands/EditTaskCommand";
+import HelpCommand from "../commands/HelpCommand";
 import ListTasksCommand from "../commands/ListTasksCommand";
 import ViewTaskCommand from "../commands/ViewTaskCommand";
 import { logError } from "../views/consoleView";
@@ -10,14 +11,15 @@ class CliController {
 	private commands: Command[] = [
 		AddTaskCommand,
 		ViewTaskCommand,
+		EditTaskCommand,
 		DeleteTaskCommand,
 		ListTasksCommand,
-		EditTaskCommand,
+		HelpCommand,
 	];
 
 	run(args: string[]) {
 		if (args.length === 0) {
-			logError("Please provide a command");
+			HelpCommand.run({});
 			return;
 		}
 
@@ -57,6 +59,10 @@ class CliController {
 			command =>
 				command.aliases.includes(keyword) || command.name === keyword
 		);
+	}
+
+	public getCommandInfo(): Partial<Command>[] {
+		return this.commands.map(command => ({ ...command, run: undefined }));
 	}
 }
 

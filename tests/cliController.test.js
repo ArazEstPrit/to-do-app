@@ -10,10 +10,10 @@ describe("CliController", () => {
 	});
 
 	describe("run", () => {
-		it("should throw an error if no command is provided", () => {
+		it("should run help if no command is provided", () => {
+			const HelpCommandSpy = jest.spyOn(require("../src/views/consoleView"), "formatCommand");
 			CliController.run([]);
-
-			expect(console.error).toHaveBeenCalled();
+			expect(HelpCommandSpy).toHaveBeenCalled();
 		});
 
 		it("should throw an error if the command is not found", () => {

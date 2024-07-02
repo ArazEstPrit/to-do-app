@@ -1,7 +1,7 @@
-// import { getTasks } from "../services/taskService";
 import readline from "readline/promises";
 import Task from "../models/task";
 import taskService from "../services/taskService";
+import Command from "../commands/Command";
 
 const styleCodes: { [key: string]: string } = {
 	bold: "1",
@@ -29,7 +29,7 @@ const styleCodes: { [key: string]: string } = {
 	white: "97",
 };
 
-function formatText(text: string, ...styles: string[]): string {
+export function formatText(text: string, ...styles: string[]): string {
 	const selectedStyles = styles
 		.map(style => styleCodes[style])
 		.filter(Boolean)
@@ -188,4 +188,28 @@ export function formatTask(task: Task): string {
 	]
 		.filter(detail => detail !== "")
 		.join("\n");
+}
+
+export function formatCommand(command: Partial<Command>): string {
+	const formatParameter = (parameter: inputDefinition): string => {
+		return parameter.optional
+			? `[${parameter.name}|${parameter.char}]`
+			: `<${parameter.name}|${parameter.char}>`;
+	};
+
+	const commandName = formatText(command.name, "italic", "lightCyan");
+	const commandAliases = command.aliases
+		.map(alias => formatText(alias, "italic", "lightCyan"))
+		.join("|");
+	const commandDescription = command.description
+		? `${command.description}\n`
+		: "";
+	const commandParameters =
+		command.parameters.length > 0
+			? `${formatText("Parameters:", "dim")} ${command.parameters
+					.map(formatParameter)
+					.join(" ")}`
+			: "";
+
+	return `${commandName} - ${commandAliases}\n${commandDescription}${commandParameters}`;
 }
