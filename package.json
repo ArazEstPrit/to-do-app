@@ -13,7 +13,6 @@
 	"bin": {
 		"todo": "./dist/main.js"
 	},
-	"type": "module",
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
