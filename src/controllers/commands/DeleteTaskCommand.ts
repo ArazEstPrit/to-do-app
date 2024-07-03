@@ -1,5 +1,5 @@
-import taskController from "../controllers/taskController";
-import taskService from "../services/taskService";
+import taskController from "../taskController";
+import taskService from "../../services/taskService";
 import Command from "./Command";
 
 export default new Command(

@@ -1,7 +1,7 @@
 import readline from "readline/promises";
 import Task from "../models/task";
 import taskService from "../services/taskService";
-import Command from "../commands/Command";
+import Command from "../controllers/commands/Command";
 
 const styleCodes: { [key: string]: string } = {
 	bold: "1",

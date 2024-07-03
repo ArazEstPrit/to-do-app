@@ -1,5 +1,5 @@
-import taskService from "../services/taskService";
-import { formatTask } from "../views/consoleView";
+import taskService from "../../services/taskService";
+import { formatTask } from "../../views/consoleView";
 import Command from "./Command";
 
 export default new Command(

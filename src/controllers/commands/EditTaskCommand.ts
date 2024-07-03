@@ -1,6 +1,6 @@
-import taskController from "../controllers/taskController";
-import taskService from "../services/taskService";
-import { prompt } from "../views/consoleView";
+import taskController from "../taskController";
+import taskService from "../../services/taskService";
+import { prompt } from "../../views/consoleView";
 import Command from "./Command";
 
 export default new Command(

@@ -1,10 +1,10 @@
-import AddTaskCommand from "../commands/AddTaskCommand";
-import Command from "../commands/Command";
-import DeleteTaskCommand from "../commands/DeleteTaskCommand";
-import EditTaskCommand from "../commands/EditTaskCommand";
-import HelpCommand from "../commands/HelpCommand";
-import ListTasksCommand from "../commands/ListTasksCommand";
-import ViewTaskCommand from "../commands/ViewTaskCommand";
+import AddTaskCommand from "./commands/AddTaskCommand";
+import Command from "./commands/Command";
+import DeleteTaskCommand from "./commands/DeleteTaskCommand";
+import EditTaskCommand from "./commands/EditTaskCommand";
+import HelpCommand from "./commands/HelpCommand";
+import ListTasksCommand from "./commands/ListTasksCommand";
+import ViewTaskCommand from "./commands/ViewTaskCommand";
 import { logError } from "../views/consoleView";
 
 class CliController {

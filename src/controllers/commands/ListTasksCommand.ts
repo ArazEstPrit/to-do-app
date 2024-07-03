@@ -1,4 +1,4 @@
-import { listTasks } from "../views/consoleView";
+import { listTasks } from "../../views/consoleView";
 import Command from "./Command";
 
 export default new Command(

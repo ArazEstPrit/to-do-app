@@ -1,5 +1,5 @@
-import cliController from "../controllers/cliController";
-import { formatCommand, formatText, log } from "../views/consoleView";
+import cliController from "../cliController";
+import { formatCommand, formatText, log } from "../../views/consoleView";
 import Command from "./Command";
 
 export default new Command("help", "List all commands", ["h"], [], () => {
