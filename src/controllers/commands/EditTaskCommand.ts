@@ -24,9 +24,11 @@ export default new Command(
 				tags: (tags: string[]) => tags.join(" "),
 			};
 
-			input.default = formatter[input.name]
-				? formatter[input.name](task[input.name])
-				: task[input.name];
+			input.default = task[input.name]
+				? formatter[input.name]
+					? formatter[input.name](task[input.name])
+					: task[input.name]
+				: undefined;
 			changedTask.push(await prompt(input));
 		}
 
