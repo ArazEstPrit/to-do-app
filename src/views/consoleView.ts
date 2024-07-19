@@ -29,6 +29,29 @@ const styleCodes: { [key: string]: string } = {
 	white: "97",
 };
 
+const formatters: { [K in keyof Task]: (value: Task[K]) => string } = {
+	id: id => formatText(`#${id}`, "gray", "italic"),
+	name: name => formatText(name, "bold"),
+	dueDate: dueDate =>
+		dueDate
+			? formatText(
+					new Date(dueDate).toLocaleDateString(
+						undefined,
+						DATE_FORMAT
+					),
+					"italic"
+			  )
+			: formatText("no due date", "dim"),
+	description: description => description || "",
+	tags: tags =>
+		tags.length > 0
+			? `[${tags.map(tag => formatText(tag, "lightCyan")).join(", ")}]`
+			: formatText("no tags", "dim"),
+	effort: effort => formatText(`${effort}`, "lightRed"),
+	importance: importance => formatText(`${importance}`, "cyan"),
+	priorityScore: score => formatText(`${score}`, "lightGreen"),
+};
+
 export function formatText(text: string, ...styles: string[]): string {
 	const selectedStyles = styles
 		.map(style => styleCodes[style])
@@ -36,6 +59,10 @@ export function formatText(text: string, ...styles: string[]): string {
 		.join(";");
 
 	return `\x1b[${selectedStyles}m${text}\x1b[0m`;
+}
+
+function removeFormatting(text: string): string {
+	return text.replace(/\x1b\[.*?m/g, "");
 }
 
 // These two functions are very simple for now, but I'll expand on them later.
@@ -57,25 +84,21 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 export function listTasks(tagFilter: string | undefined) {
 	const tasks = taskService
 		.getTasks()
-		.map(task => ({
-			...task,
-			dueDate: task.dueDate
-				? new Date(task.dueDate).toLocaleDateString(
-						undefined,
-						DATE_FORMAT
-				  )
-				: "",
-		}))
-		.filter(task => !tagFilter || task.tags.includes(tagFilter))
-		.reduce((acc, { id, ...x }) => {
-			acc[id] = x;
-			return acc;
-		}, {});
+		.filter(task => !tagFilter || task.tags.includes(tagFilter));
 
 	if (Object.keys(tasks).length === 0) {
 		log("No tasks found");
 	} else {
-		console.table(tasks);
+		printTable(tasks, [
+			"id",
+			"name",
+			"dueDate",
+			"description",
+			"tags",
+			"effort",
+			"importance",
+			"priorityScore",
+		]);
 	}
 }
 
@@ -153,31 +176,18 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 }
 
 export function formatTask(task: Task): string {
-	const name = formatText(task.name, "bold");
-	const id = formatText("#" + task.id.toString(), "gray", "italic");
-	const description = task.description ?? "";
-	const dueDate = task.dueDate
-		? formatText(
-				new Date(task.dueDate).toLocaleDateString(
-					undefined,
-					DATE_FORMAT
-				),
-				"italic"
-		  )
-		: "";
-	const tags =
-		task.tags.length > 0
-			? `[${task.tags
-					.map(tag => formatText(tag, "lightCyan"))
-					.join(", ")}]`
-			: formatText("no tags", "dim");
+	const name = formatters.name(task.name);
+	const id = formatters.id(task.id);
+	const description = formatters.description(task.description);
+	const dueDate = formatters.dueDate(task.dueDate);
+	const tags = formatters.tags(task.tags);
 
 	const score =
-		formatText("" + task.effort, "lightRed") +
+		formatters.effort(task.effort) +
 		":" +
-		formatText("" + task.importance, "cyan") +
+		formatters.importance(task.importance) +
 		" - " +
-		formatText("" + task.priorityScore, "lightGreen");
+		formatters.priorityScore(task.effort + task.importance);
 
 	return [
 		[name, id].join(" "),
@@ -212,4 +222,59 @@ export function formatCommand(command: Partial<Command>): string {
 			: "";
 
 	return `${commandName} - ${commandAliases}\n${commandDescription}${commandParameters}`;
+}
+
+function printTable(data: object[], headers: string[], columnGap = "  ") {
+	const styleCell = (header: string, cell: unknown) =>
+		formatters[header] ? formatters[header](cell) : String(cell);
+
+	const getPadding = (value: string, maxLength: number) =>
+		" ".repeat(maxLength - value.length);
+
+	const getUnformattedStyle = (header: string, cell: unknown) =>
+		removeFormatting(styleCell(header, cell));
+
+	const columnLengths = headers.reduce(
+		(acc, header) => ({
+			...acc,
+			[header]: Math.max(
+				header.length,
+				...data.map(
+					row => getUnformattedStyle(header, row[header]).length
+				)
+			),
+		}),
+		{}
+	);
+
+	const headerRow = formatText(
+		headers
+			.map(
+				header =>
+					header.charAt(0).toUpperCase() +
+					header.substring(1) +
+					getPadding(header, columnLengths[header])
+			)
+			.join(columnGap),
+		"bold",
+		"underline"
+	);
+
+	const rows = data
+		.map(row =>
+			headers
+				.map(
+					header =>
+						styleCell(header, row[header]) +
+						getPadding(
+							getUnformattedStyle(header, row[header]),
+							columnLengths[header]
+						)
+				)
+				.join(columnGap)
+		)
+		.join("\n");
+
+	log(headerRow);
+	log(rows);
 }
