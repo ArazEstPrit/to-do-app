@@ -1,4 +1,4 @@
-const Command = require("../src/commands/Command").default;
+const Command = require("../src/controllers/commands/Command").default;
 const consoleView = require("../src/views/consoleView");
 
 describe("Command", () => {
