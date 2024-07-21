@@ -1,6 +1,6 @@
-import TaskController from "../taskController";
-import TaskService from "../../services/taskService";
-import Command from "./Command";
+import TaskController from "../taskController.js";
+import TaskService from "../../services/taskService.js";
+import Command from "./Command.js";
 
 export default new Command(
 	"add",

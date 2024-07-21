@@ -1,11 +1,11 @@
-import AddTaskCommand from "./commands/AddTaskCommand";
-import Command from "./commands/Command";
-import DeleteTaskCommand from "./commands/DeleteTaskCommand";
-import EditTaskCommand from "./commands/EditTaskCommand";
-import HelpCommand from "./commands/HelpCommand";
-import ListTasksCommand from "./commands/ListTasksCommand";
-import ViewTaskCommand from "./commands/ViewTaskCommand";
-import { logError } from "../views/consoleView";
+import AddTaskCommand from "./commands/AddTaskCommand.js";
+import Command from "./commands/Command.js";
+import DeleteTaskCommand from "./commands/DeleteTaskCommand.js";
+import EditTaskCommand from "./commands/EditTaskCommand.js";
+import HelpCommand from "./commands/HelpCommand.js";
+import ListTasksCommand from "./commands/ListTasksCommand.js";
+import ViewTaskCommand from "./commands/ViewTaskCommand.js";
+import { logError } from "../views/consoleView.js";
 
 class CliController {
 	private commands: Command[] = [

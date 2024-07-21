@@ -1,6 +1,6 @@
-import taskService from "../../services/taskService";
-import { formatTask } from "../../views/consoleView";
-import Command from "./Command";
+import taskService from "../../services/taskService.js";
+import { formatTask } from "../../views/consoleView.js";
+import Command from "./Command.js";
 
 export default new Command(
 	"view",

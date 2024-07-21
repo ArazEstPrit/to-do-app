@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import cliController from "./controllers/cliController";
+import cliController from "./controllers/cliController.js";
 
 const parameters = process.argv.slice(2);
 

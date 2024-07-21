@@ -1,6 +1,6 @@
-import taskController from "../taskController";
-import taskService from "../../services/taskService";
-import Command from "./Command";
+import taskController from "../taskController.js";
+import taskService from "../../services/taskService.js";
+import Command from "./Command.js";
 
 export default new Command(
 	"delete",

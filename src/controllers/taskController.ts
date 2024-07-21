@@ -1,6 +1,6 @@
-import Task from "../models/task";
-import taskService from "../services/taskService";
-import { formatTask, log } from "../views/consoleView";
+import Task from "../models/task.js";
+import taskService from "../services/taskService.js";
+import { formatTask, log } from "../views/consoleView.js";
 
 class TaskController {
 	private parseInputs(

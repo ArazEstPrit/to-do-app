@@ -1,6 +1,6 @@
-import cliController from "../cliController";
-import { formatCommand, formatText, log } from "../../views/consoleView";
-import Command from "./Command";
+import cliController from "../cliController.js";
+import { formatCommand, formatText, log } from "../../views/consoleView.js";
+import Command from "./Command.js";
 
 export default new Command("help", "List all commands", ["h"], [], () => {
 	console.log(formatText("Commands:", "bold"));

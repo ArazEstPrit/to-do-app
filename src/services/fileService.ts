@@ -3,6 +3,8 @@
 import { dirname, resolve } from "path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
+const __dirname = import.meta.dirname;
+
 export function readFile(path: string): string | null {
 	path = resolve(__dirname, path);
 	let contents: string | null = null;

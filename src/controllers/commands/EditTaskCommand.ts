@@ -1,7 +1,7 @@
-import taskController from "../taskController";
-import taskService from "../../services/taskService";
-import { prompt } from "../../views/consoleView";
-import Command from "./Command";
+import taskController from "../taskController.js";
+import taskService from "../../services/taskService.js";
+import { prompt } from "../../views/consoleView.js";
+import Command from "./Command.js";
 
 export default new Command(
 	"edit",

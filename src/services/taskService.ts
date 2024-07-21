@@ -1,6 +1,6 @@
-import Task from "../models/task";
-import { inputDefinition } from "../views/consoleView";
-import { readFile, writeFile } from "./fileService";
+import Task from "../models/task.js";
+import { inputDefinition } from "../views/consoleView.js";
+import { readFile, writeFile } from "./fileService.js";
 
 const TASK_FILE = "../../database/tasks.json";
 
