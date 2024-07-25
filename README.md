@@ -5,11 +5,10 @@ This is a command line-based to-do app that allows you to add, remove, edit, and
 ## Installation
 
 Clone this repository and run `npm install` to install the dependencies. Ensure you have Node.js installed.
-After installing the dependencies, npm will automatically compile the code, and allow the app to be run anywhere. However, if it gets stuck, exit the process and run the following commands manually:
+After installing the dependencies, npm will automatically compile the code. You can then run the following command to allow the app to be run from anywhere using the `todo` keyword:
 
 ```sh
-npm run tsc
-npm link
+npm link to-do-app
 ```
 
 ## Usage
@@ -68,10 +67,6 @@ Thu, 05 Jun 2025
 [tag1, tag2]
 3:4 - 1
 ```
-
-## Tests
-
-The app has unit tests written using Jest. Run `npm test` to execute the tests.
 
 ## Contributing
 
