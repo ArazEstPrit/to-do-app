@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node ./dist/main.js",
 		"tsc": "tsc",
-		"postinstall": "npm run tsc && npm link",
+		"postinstall": "npm run tsc",
 		"dev": "vite dev ./src/views/web/"
 	},
 	"bin": {
