@@ -1,0 +1,122 @@
+@use "../utils/mixins";
+@use "../utils/vars";
+
+$button-colors: (
+	main: (
+		main: #{vars.$primary},
+		light: #{vars.$primary-light},
+		dark: #{vars.$primary-dark},
+		background: #{vars.$primary-background},
+		text: #{vars.$primary-dark},
+		text-hover: #{vars.$white},
+		text-active: #{vars.$g700},
+	),
+	normal: (
+		main: #{vars.$g300},
+		light: #{vars.$g800},
+		dark: #{vars.$g200},
+		background: #{vars.$g800},
+		text: #{vars.$g200},
+		text-hover: #{vars.$white},
+		text-active: #{vars.$g600},
+	),
+	success: (
+		main: #{vars.$success},
+		light: #{vars.$success-light},
+		dark: #{vars.$success-dark},
+		background: #{vars.$success-background},
+		text: #{vars.$success-dark},
+		text-hover: #{vars.$white},
+		text-active: #{vars.$g800},
+	),
+	caution: (
+		main: #{vars.$caution},
+		light: #{vars.$caution-light},
+		dark: #{vars.$caution-dark},
+		background: #{vars.$caution-background},
+		text: #{vars.$caution-dark},
+		text-hover: #{vars.$g300},
+		text-active: #{vars.$black},
+	),
+	danger: (
+		main: #{vars.$danger},
+		light: #{vars.$danger-light},
+		dark: #{vars.$danger-dark},
+		background: #{vars.$danger-background},
+		text: #{vars.$danger-dark},
+		text-hover: #{vars.$white},
+		text-active: #{vars.$g800},
+	),
+	info: (
+		main: #{vars.$info},
+		light: #{vars.$info-light},
+		dark: #{vars.$info-dark},
+		background: #{vars.$info-background},
+		text: #{vars.$info-dark},
+		text-hover: #{vars.$white},
+		text-active: #{vars.$g800},
+	),
+) !default;
+
+button {
+	font-variant-caps: titling-caps;
+	padding: 10px 20px;
+	border-radius: 12px;
+
+	&:focus-visible {
+		outline: 3px solid vars.$primary-light;
+	}
+
+	@each $name, $color in $button-colors {
+		&.#{$name}.primary {
+			@include mixins.border(map-get($color, dark));
+			background-color: map-get($color, main);
+			color: map-get($color, text-hover);
+			box-shadow: 0 2px 4px 0 map-get($color, background);
+
+			&:hover,
+			&:focus-visible {
+				background-color: map-get($color, dark);
+			}
+
+			&:active {
+				background-color: map-get($color, dark);
+				color: map-get($color, text-active);
+			}
+		}
+
+		&.#{$name}.secondary {
+			@include mixins.border(map-get($color, main));
+			background-color: map-get($color, background);
+			color: map-get($color, text);
+
+			&:hover,
+			&:focus-visible {
+				background-color: map-get($color, main);
+				border-color: map-get($color, dark);
+				color: map-get($color, text-hover);
+			}
+
+			&:active {
+				background-color: map-get($color, dark);
+				color: map-get($color, text-active);
+			}
+		}
+
+		&.#{$name}.link {
+			cursor: pointer;
+			background: none;
+			color: map-get($color, main);
+			border: none;
+
+			&:hover,
+			&:focus-visible {
+				text-decoration: underline;
+			}
+
+			&:active {
+				color: map-get($color, dark);
+			}
+		}
+	}
+}
