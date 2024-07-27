@@ -1,10 +1,11 @@
-import AddTaskCommand from "./commands/AddTaskCommand.js";
 import Command from "./commands/Command.js";
+import AddTaskCommand from "./commands/AddTaskCommand.js";
 import DeleteTaskCommand from "./commands/DeleteTaskCommand.js";
 import EditTaskCommand from "./commands/EditTaskCommand.js";
 import HelpCommand from "./commands/HelpCommand.js";
 import ListTasksCommand from "./commands/ListTasksCommand.js";
 import ViewTaskCommand from "./commands/ViewTaskCommand.js";
+import OpenWebViewCommand from "./commands/OpenWebViewCommand.js";
 import { logError } from "../views/consoleView.js";
 
 class CliController {
@@ -14,6 +15,7 @@ class CliController {
 		EditTaskCommand,
 		DeleteTaskCommand,
 		ListTasksCommand,
+		OpenWebViewCommand,
 		HelpCommand,
 	];
 
