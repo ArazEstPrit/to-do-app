@@ -1,30 +1,5 @@
-@import url("./font.scss");
-
-:root {
-
-	--main: #845ec2;
-	--main-faint: #9b7ed0;
-	--main-dark: #60448f;
-
-
-	--accent: #FF8066;
-	--accent-faint: #ff9b85;
-	--accent-dark: #be5d4a;
-
-
-	--dark: #4B4453;
-	--dark-faint: #6c6673;
-	--dark-dark: #35303b;
-
-
-	--light: #FBF0EF;
-	--light-faint: #fcf3f2;
-	--light-dark: #bab2b1;
-
-	--white: #fefff4;
-	--black: #242325;
-}
-
-body {
-	background-color: var(--white);
-}
+@use "./base/reset";
+@use "./base/base";
+@use "./base/typography";
+@use "./utils/mixins";
+@use "./utils/vars";

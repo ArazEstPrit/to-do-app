@@ -1,0 +1,29 @@
+@use "../utils/vars";
+@use "sass:math";
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
+body,
+* {
+	font-family: "Source Sans 3", sans-serif;
+	font-style: normal;
+
+	font-weight: vars.$font-weight;
+	line-height: vars.$line-height;
+	font-size: vars.$font-size;
+}
+
+$tags: (
+	"h1": 6,
+	"h2": 5,
+	"h3": 4,
+	"h4": 3,
+	"p": 0,
+);
+
+@each $tag, $index in $tags {
+	#{$tag},
+	.#{$tag} {
+		font-weight: vars.$font-weight + $index * 50;
+		font-size: (vars.$font-size * math.pow(vars.$font-ratio, $index));
+	}
+}

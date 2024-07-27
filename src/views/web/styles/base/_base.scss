@@ -1,0 +1,27 @@
+@use "../utils/vars";
+
+body {
+	background-color: vars.$white;
+}
+
+#root {
+	min-height: 100vh;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+* {
+	transition: 300ms ease-in-out;
+
+	&:hover,
+	&:focus-visible {
+		transition-duration: 150ms;
+	}
+
+	&:active {
+		transition-duration: 20ms;
+	}
+}

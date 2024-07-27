@@ -1,0 +1,51 @@
+@use "sass:color";
+
+/* Font stuff */
+
+$font-size: 16px;
+$font-weight: 500;
+$line-height: 1.5;
+$font-ratio: 1.25;
+
+/* Aesthetics */
+
+$border-width: 1px;
+
+/* Colors */
+
+$white: #f5f5ff;
+$black: #161617;
+
+$g800: #dddde6;
+$g700: #c4c4cc;
+$g600: #acacb3;
+$g500: #7b7b80;
+$g400: #626266;
+$g300: #49494c;
+$g200: #313133;
+$g100: #212122;
+
+$primary: #835cc1;
+$primary-light: #9472ca;
+$primary-dark: #7351a9;
+$primary-background: #9472ca33;
+
+$success: #41bc4d;
+$success-light: #71d87b;
+$success-dark: #359b3f;
+$success-background: #71d87b33;
+
+$caution: #dab329;
+$caution-light: #eacc5f;
+$caution-dark: #9d8015;
+$caution-background: #eacc5f33;
+
+$danger: #ee3a2d;
+$danger-light: #f56358;
+$danger-dark: #af271d;
+$danger-background: #f5625833;
+
+$info: #28b4f0;
+$info-light: #59c7f7;
+$info-dark: #1d95c9;
+$info-background: #59c7f733;

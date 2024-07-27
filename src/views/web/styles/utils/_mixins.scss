@@ -1,0 +1,5 @@
+@use "../utils/vars";
+
+@mixin border($color) {
+	border: solid #{vars.$border-width} $color;
+}
