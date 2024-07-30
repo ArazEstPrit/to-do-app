@@ -1,4 +1,4 @@
-import { listTasks } from "../../views/consoleView.js";
+import { listTasks } from "../../views/console/listTasks.js";
 import Command from "./Command.js";
 
 export default new Command(

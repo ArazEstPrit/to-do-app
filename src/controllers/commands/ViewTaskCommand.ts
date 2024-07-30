@@ -1,5 +1,5 @@
 import taskService from "../../services/taskService.js";
-import { formatTask } from "../../views/consoleView.js";
+import { displayTask } from "../../views/console/listTasks.js";
 import Command from "./Command.js";
 
 export default new Command(
@@ -14,6 +14,6 @@ export default new Command(
 			return;
 		}
 
-		console.log(formatTask(task));
+		console.log(displayTask(task));
 	}
 );

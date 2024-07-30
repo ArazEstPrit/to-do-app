@@ -3,7 +3,7 @@ import { sassPlugin } from "esbuild-sass-plugin";
 import { readFile, writeFile } from "../services/fileService.js";
 import express from "express";
 import { exec } from "child_process";
-import { log } from "../views/consoleView.js";
+import { log } from "../views/console/logging.js";
 import { resolve } from "path";
 import { apiRouter } from "./serverController.js";
 

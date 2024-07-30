@@ -1,5 +1,6 @@
-import { inputDefinition, logError } from "../../views/consoleView.js";
-import { prompt } from "../../views/consoleView.js";
+import { inputDefinition } from "../../views/console/prompting.js";
+import { logError } from "../../views/console/logging.js";
+import { prompt } from "../../views/console/prompting.js";
 
 export default class Command {
 	constructor(

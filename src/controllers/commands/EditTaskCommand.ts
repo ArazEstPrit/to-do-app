@@ -1,6 +1,6 @@
 import taskController from "../taskController.js";
 import taskService from "../../services/taskService.js";
-import { prompt } from "../../views/consoleView.js";
+import { prompt } from "../../views/console/prompting.js";
 import Command from "./Command.js";
 
 export default new Command(

@@ -1,6 +1,7 @@
 import Task from "../models/task.js";
 import taskService from "../services/taskService.js";
-import { formatTask, log } from "../views/consoleView.js";
+import { displayTask } from "../views/console/listTasks.js";
+import { log } from "../views/console/logging.js";
 
 class TaskController {
 	private parseInputs(
@@ -44,7 +45,7 @@ class TaskController {
 			)
 		);
 
-		log("Task created:\n" + formatTask(taskService.addTask(task)));
+		log("Task created:\n" + displayTask(taskService.addTask(task)));
 	}
 
 	public deleteTask(id: string) {
@@ -74,7 +75,7 @@ class TaskController {
 		);
 
 		const task = taskService.editTask(parseInt(id), updatedTask);
-		log("Task updated:\n" + formatTask(task));
+		log("Task updated:\n" + displayTask(task));
 	}
 }
 

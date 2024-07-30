@@ -6,7 +6,7 @@ import HelpCommand from "./commands/HelpCommand.js";
 import ListTasksCommand from "./commands/ListTasksCommand.js";
 import ViewTaskCommand from "./commands/ViewTaskCommand.js";
 import OpenWebViewCommand from "./commands/OpenWebViewCommand.js";
-import { logError } from "../views/consoleView.js";
+import { logError } from "../views/console/logging.js";
 
 class CliController {
 	private commands: Command[] = [
