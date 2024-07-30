@@ -165,6 +165,7 @@ class TaskService {
 
 	public editTask(id: number, newTask: Task) {
 		const task = this.findTask(id);
+		newTask.id = id;
 		if (task) {
 			Object.assign(task, newTask);
 			this.saveTasks();
