@@ -61,7 +61,7 @@ export function displayTask(task: Task): string {
 		":" +
 		formatters.importance(task.importance) +
 		" - " +
-		formatters.priorityScore(task.effort + task.importance);
+		formatters.priorityScore(task.priorityScore);
 
 	return [
 		[name, id].join(" "),
