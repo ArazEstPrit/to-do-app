@@ -147,9 +147,7 @@ class TaskService {
 	}
 
 	public deleteTask(task: Task) {
-		this.tasks = this.tasks.filter(
-			t => t.name !== task.name || t.dueDate !== task.dueDate
-		);
+		this.tasks = this.tasks.filter(t => t.id !== task.id);
 		this.saveTasks();
 	}
 
