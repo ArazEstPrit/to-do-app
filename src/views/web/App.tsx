@@ -1,17 +1,12 @@
 import React from "react";
 import "./styles/main.scss";
-import { Button } from "./components/Button.tsx";
+import { TaskTable } from "./components/TaskTable.tsx";
 
 export function App() {
 	return (
 		<>
-			<h1>To-Do App</h1>
-			<Button
-				text="Hello World!"
-				color="main"
-				weight="primary"
-				onClick={() => {}}
-			/>
+			<h2>Tasks</h2>
+			<TaskTable />
 		</>
 	);
 }

@@ -1,0 +1,48 @@
+@use "../utils/vars";
+
+table {
+	$border-color: vars.$g500;
+	$border-radius: 10px;
+
+	border-collapse: separate;
+	border-spacing: 0;
+	min-width: 350px;
+
+	tr {
+		th,
+		td {
+			border-right: vars.$border-width solid $border-color;
+			border-bottom: vars.$border-width solid $border-color;
+			padding: 5px;
+
+			&:first-child {
+				border-left: vars.$border-width solid $border-color;
+			}
+		}
+
+		th {
+			background-color: vars.$g800;
+			text-align: center;
+			font-weight: 600;
+			font-style: italic;
+			border-top: vars.$border-width solid $border-color;
+
+			&:first-child {
+				border-top-left-radius: $border-radius;
+			}
+
+			&:last-child {
+				border-top-right-radius: $border-radius;
+			}
+		}
+	}
+
+	tr:last-child {
+		td:first-child {
+			border-bottom-left-radius: $border-radius;
+		}
+		td:last-child {
+			border-bottom-right-radius: $border-radius;
+		}
+	}
+}
