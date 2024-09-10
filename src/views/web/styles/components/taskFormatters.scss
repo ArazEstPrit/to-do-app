@@ -1,0 +1,17 @@
+@use "../utils/vars";
+
+.id {
+	font-style: italic;
+}
+
+.dueDate {
+	font-style: italic;
+
+	&.noDueDate {
+		color: vars.$g300;
+	}
+}
+
+.tags.noTags {
+	color: vars.$g300;
+}

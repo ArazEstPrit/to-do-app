@@ -1,6 +1,7 @@
 import Task from "../../../models/task.ts";
 import { useFetch } from "../utils/useFetch.ts";
 import Table from "./UI/Table.tsx";
+import { taskFormatters } from "./UI/TaskFormatters.tsx";
 import React, { useEffect, useState } from "react";
 
 export function TaskTable() {
@@ -14,17 +15,13 @@ export function TaskTable() {
 		return <p>No tasks found</p>;
 	}
 
-	const formattedTasks = tasks.map(task => ({
-		...task,
-		tags: task.tags.join(", ") || "no tags",
-		dueDate: new Date(task.dueDate!).toLocaleDateString(),
-	}));
-
 	return (
 		<Table
-			data={formattedTasks}
+			data={tasks}
+			renderers={taskFormatters}
 			headers={[
 				"id",
+				"name",
 				"dueDate",
 				"description",
 				"tags",
