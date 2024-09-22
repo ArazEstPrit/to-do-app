@@ -36,6 +36,10 @@ export async function startWebView() {
 	app.use(express.json());
 	app.use("/api", apiRouter);
 
+	process.on("SIGINT", () => {
+		process.exit();
+	});
+
 	await new Promise<void>(resolve => {
 		app.listen(PORT, () => {
 			log(`Server started on http://localhost:${PORT}`);
