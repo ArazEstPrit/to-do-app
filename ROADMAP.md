@@ -19,7 +19,6 @@ I'm outlining these as prerequisites for progressing to each version.
 
 - [ ] Task Details:
   - [x] Description
-  - [ ] Customizable task statuses
   - [x] Tags
   - [x] Priority score
     - [x] Effort: 1-6
@@ -32,16 +31,16 @@ I'm outlining these as prerequisites for progressing to each version.
   - [x] View Tasks
     - [x] By tags
     - [x] Sort Priority score
-- [ ] Migrate to SQLite database?
 - [ ] UI:
   - [ ] CLI improvements
-    - [ ] Autocomplete
+    - [ ] Tag autocomplete
   - [ ] Basic GUI - web app (use React?)
 
 ## 2.0.0
 
 - [ ] Task Details:
   - [ ] Duration: time required to complete
+  - [ ] Customizable task statuses
   - [ ] Planned date: scheduling for task completion
   - [ ] Recurring tasks: Set tasks to repeat at specified intervals (daily, weekly, monthly, etc.).
   - [ ] Subtasks
