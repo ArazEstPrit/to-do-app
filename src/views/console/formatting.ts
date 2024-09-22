@@ -3,6 +3,14 @@ const styleCodes: { [key: string]: string } = {
 	dim: "2",
 	italic: "3",
 	underline: "4",
+	grayUnderline: "58:5:8",
+	redUnderline: "58:5:9",
+	greenUnderline: "58:5:10",
+	yellowUnderline: "58:5:11",
+	blueUnderline: "58:5:12",
+	magentaUnderline: "58:5:13",
+	cyanUnderline: "58:5:14",
+	whiteUnderline: "58:5:15",
 	blink: "5",
 	reverse: "7",
 	strikethrough: "9",
@@ -39,6 +47,7 @@ export function formatText(text: string, ...styles: string[]): string {
 
 	return `\x1b[${selectedStyles}m${text}\x1b[0m`;
 }
+
 export function removeFormatting(text: string): string {
 	return text.replace(/\x1b\[.*?m/g, "");
 }

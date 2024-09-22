@@ -9,6 +9,7 @@ export default new Command(
 		{
 			name: "tag",
 			char: "t",
+			type: "string",
 			optional: true,
 		},
 	],

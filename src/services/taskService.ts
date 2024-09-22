@@ -11,12 +11,14 @@ class TaskService {
 		{
 			name: "name",
 			char: "n",
+			type: "string",
 			condition: (name: string): boolean | string =>
 				name.trim() ? true : "Task name cannot be empty",
 		},
 		{
 			name: "dueDate",
 			char: "d",
+			type: "date",
 			condition: (date: string): boolean | string => {
 				const parsedDate = new Date(date);
 				return parsedDate < new Date()
@@ -30,16 +32,19 @@ class TaskService {
 		{
 			name: "description",
 			char: "m",
+			type: "string",
 			optional: true,
 		},
 		{
 			name: "tags",
 			char: "t",
+			type: "string",
 			optional: true,
 		},
 		{
 			name: "effort",
 			char: "e",
+			type: "string",
 			condition: (effort: string): boolean | string => {
 				const parsedEffort = parseInt(effort);
 				return isNaN(parsedEffort)
@@ -53,6 +58,7 @@ class TaskService {
 		{
 			name: "importance",
 			char: "i",
+			type: "string",
 			condition: (importance: string): boolean | string => {
 				const parsedImportance = parseInt(importance);
 				return isNaN(parsedImportance)
@@ -68,6 +74,7 @@ class TaskService {
 	public readonly taskId: inputDefinition = {
 		name: "id",
 		char: "k",
+		type: "string",
 		condition: (id: string): boolean | string =>
 			!isNaN(parseInt(id))
 				? this.getTasks().find(t => t.id === parseInt(id)) === undefined
