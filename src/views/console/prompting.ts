@@ -29,7 +29,7 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 				)
 			).trim();
 		} else if (prompt.type === "date") {
-			input = await handleDateInput(buildPromptText());
+			input = await handleDateInput();
 			process.stdin.setRawMode(false);
 			process.stdout.write("\n");
 		}
@@ -61,15 +61,17 @@ export async function prompt(prompt: inputDefinition): Promise<string> {
 		return formattedPromptText;
 	}
 
-	async function handleDateInput(promptText: string): Promise<string> {
-		let currentDate = new Date();
+	async function handleDateInput(): Promise<string> {
+		let currentDate = prompt.default
+			? new Date(prompt.default)
+			: new Date();
 		let selectedPart = 0;
 		const parts = ["weekday", "day", "month", "year"];
 
 		function displayDate() {
 			const dateStr = formatDate(currentDate);
 			const formattedDate = formatWithUnderline(dateStr, selectedPart);
-			process.stdout.write("\r" + promptText + formattedDate);
+			process.stdout.write("\r" + buildPromptText() + formattedDate);
 		}
 
 		function formatDate(date: Date): string {
