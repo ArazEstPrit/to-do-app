@@ -17,20 +17,18 @@ export default class Command {
 
 			const valid = param.condition ? param.condition(value || "") : true;
 
-			if (value && valid !== true) {
-				logError(valid as string);
-			}
-
-			if (
-				value === undefined ||
-				(!value && !param.optional) ||
-				(value && valid !== true)
-			) {
-				args[param.name] = await prompt(param);
-			} else if (value === "" && param.optional) {
-				args[param.name] = null;
+			if (value !== undefined) {
+				if (valid === true) {
+					args[param.name] = value;
+				} else {
+					args[param.name] = await prompt(param);
+				}
 			} else {
-				args[param.name] = value;
+				if (param.ask === false) {
+					args[param.name] = param.default || null;
+				} else {
+					args[param.name] = await prompt(param);
+				}
 			}
 		}
 

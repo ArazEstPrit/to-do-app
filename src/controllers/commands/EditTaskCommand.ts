@@ -7,9 +7,13 @@ export default new Command(
 	"edit",
 	"Edit a task",
 	["e"],
-	[taskService.taskId],
-	async ({ id }) => {
+	[
+		taskService.taskId,
+		...taskService.taskDetails.map(input => ({ ...input, ask: false })),
+	],
+	async ({ id, ...params }) => {
 		const task = taskService.findTask(parseInt(id));
+
 		const changedTask = [];
 
 		for (const input of taskService.taskDetails) {
@@ -29,7 +33,8 @@ export default new Command(
 					? formatter[input.name](task[input.name])
 					: task[input.name]
 				: undefined;
-			changedTask.push(await prompt(input));
+
+			changedTask.push(params[input.name] || (await prompt(input)));
 		}
 
 		taskController.editTask(id, changedTask);

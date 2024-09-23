@@ -9,6 +9,7 @@ export interface inputDefinition {
 	condition?: (value: string) => boolean | string;
 	optional?: boolean;
 	default?: string;
+	ask?: boolean;
 }
 
 export async function prompt(prompt: inputDefinition): Promise<string> {

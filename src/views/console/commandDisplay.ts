@@ -4,7 +4,7 @@ import { inputDefinition } from "./prompting.js";
 
 export function displayCommand(command: Partial<Command>): string {
 	const formatParameter = (parameter: inputDefinition): string => {
-		return parameter.optional
+		return parameter.optional || parameter.ask === false
 			? `[${parameter.name}|${parameter.char}]`
 			: `<${parameter.name}|${parameter.char}>`;
 	};
