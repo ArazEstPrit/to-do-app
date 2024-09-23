@@ -15,7 +15,7 @@ npm link to-do-app
 
 To use the app, run `todo` along with one of these commands:
 
-* `add|a --name <task name> [--dueDate <due date>] [--description <description>] [--tags <"tag1 tag2 ...">"] [--effort <1-6>] [--importance <1-6>]` - Adds a task with the specified parameters.
+* `add|a --name <--name <task name>> [--dueDate <due date>] [--description <description>] [--tags <"tag1 tag2 ...">] [--effort <1-6>] [--importance <1-6>]` - Adds a task with the specified parameters.
   * The `dueDate` field prompts for a date. It shows the current date by default in the `Mon 01 Jan 2025` format. You can use the *left and right arrow keys* to select different parts of the date. Once selected, use the *up and down arrow keys* to adjust the value. Press Enter to confirm the date.
   * The `effort` and `importance` parameters are a measure (from 1 to 6) of how important a task is, as well as how much effort is needed to complete the task. These values are used to calculate a *priority score*, which increases as the due date comes closer. It is calculated using the following expression: $\dfrac{2b}{\sqrt[a]{ d }}$, where $b$ is the importance, $a$ effort, and $d$ days until the deadline. If you want to see a graph of priority score over time, check this [Desmos graph](https://www.desmos.com/calculator/tawrfjp6m4)
 * `complete|delete|c|d --id <task ID>`
@@ -24,8 +24,8 @@ To use the app, run `todo` along with one of these commands:
   * Lists all tasks, or filter them by tag.
 * `view|v --id <task ID>`
   * Displays the info of the task with the specified task ID.
-* `edit|e --id <task ID>`
-  * Prompts the user to edit each parameter of the task with the specified ID.
+* `edit|e --id <task ID> [--name <task name>] [--dueDate <due date>] [--description <description>] [--tags <"tag1 tag2 ...">] [--effort <1-6>] [--importance <1-6>]`
+  * Allows the user to edit the task with the specified ID. If no parameters are provided, the command will prompt for each field. Alternatively, specific fields can be updated directly by passing the corresponding flags.
 
 **Note**: The following flag shorthands are available:
 `--name`: `-n`
