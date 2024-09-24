@@ -18,13 +18,6 @@ export default new Command(
 
 		for (const input of taskService.taskDetails) {
 			const formatter = {
-				dueDate: (date: Date) =>
-					new Date(
-						new Date(date).getTime() -
-							new Date().getTimezoneOffset() * 60000
-					)
-						.toISOString()
-						.split("T")[0],
 				tags: (tags: string[]) => tags.join(" "),
 			};
 
