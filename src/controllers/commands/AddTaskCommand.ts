@@ -7,14 +7,21 @@ export default new Command(
 	"Add a new task",
 	["a"],
 	TaskService.taskDetails,
-	({ name, dueDate, description, tags, effort, importance }) => {
+	(props: {
+		name: string;
+		dueDate: string | null;
+		description: string;
+		tags: string;
+		effort: string;
+		importance: string;
+	}) => {
 		TaskController.createTask(
-			name,
-			dueDate,
-			description,
-			tags,
-			effort,
-			importance
+			props.name,
+			props.dueDate,
+			props.description,
+			props.tags,
+			props.effort,
+			props.importance
 		);
 	}
 );

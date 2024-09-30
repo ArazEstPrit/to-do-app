@@ -1,5 +1,4 @@
 import { inputDefinition } from "../../views/console/prompting.js";
-import { logError } from "../../views/console/logging.js";
 import { prompt } from "../../views/console/prompting.js";
 
 export default class Command {
@@ -8,14 +7,20 @@ export default class Command {
 		public description: string,
 		public aliases: string[],
 		public parameters: inputDefinition[],
-		private action: (params: { [key: string]: string }) => void
+		private action: (params: { [key: string]: string | boolean }) => void
 	) {}
 
-	async run(args: { [key: string]: string }): Promise<void> {
+	async run(args: { [key: string]: string | boolean }): Promise<void> {
 		for (const param of this.parameters) {
-			const value = args[param.name] || args[param.char];
+			let value: string | boolean = args[param.name] || args[param.char];
 
-			const valid = param.condition ? param.condition(value || "") : true;
+			if (param.type !== "boolean" && typeof value === "boolean") {
+				value = undefined;
+			}
+
+			const valid = param.condition
+				? param.condition(String(value) || "")
+				: true;
 
 			if (value !== undefined) {
 				if (valid === true) {

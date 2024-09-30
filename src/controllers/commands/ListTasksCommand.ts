@@ -13,5 +13,5 @@ export default new Command(
 			optional: true,
 		},
 	],
-	({ tag }) => listTasks(tag)
+	({ tag }: { tag?: string }) => listTasks(tag)
 );

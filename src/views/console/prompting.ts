@@ -5,7 +5,7 @@ import { logError } from "./logging.js";
 export interface inputDefinition {
 	name: string;
 	char?: string;
-	type: "string" | "date";
+	type: "string" | "date" | "boolean";
 	condition?: (value: string) => boolean | string;
 	optional?: boolean;
 	default?: string;

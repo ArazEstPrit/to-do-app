@@ -7,7 +7,7 @@ export default new Command(
 	"View a specified task",
 	["v"],
 	[taskService.taskId],
-	({ id }) => {
+	({ id }: { id: string }) => {
 		const task = taskService.findTask(parseInt(id));
 
 		if (!task) {

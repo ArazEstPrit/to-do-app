@@ -11,7 +11,10 @@ export default new Command(
 		taskService.taskId,
 		...taskService.taskDetails.map(input => ({ ...input, ask: false })),
 	],
-	async ({ id, ...params }) => {
+	async ({
+		id,
+		...params
+	}: { id: string } & { [key: string]: string | boolean | undefined }) => {
 		const task = taskService.findTask(parseInt(id));
 
 		const changedTask = [];

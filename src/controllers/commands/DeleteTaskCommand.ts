@@ -7,7 +7,7 @@ export default new Command(
 	"Delete a task",
 	["complete", "d", "c"],
 	[taskService.taskId],
-	({ id }) => {
+	({ id }: { id: string }) => {
 		taskController.deleteTask(id);
 	}
 );

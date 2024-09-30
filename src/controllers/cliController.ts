@@ -40,16 +40,22 @@ class CliController {
 		command.run(parameters);
 	}
 
-	private parseCommandLineFlags(args: string[]): { [key: string]: string } {
-		const parsedArgs: { [key: string]: string } = {};
+	private parseCommandLineFlags(args: string[]): {
+		[key: string]: string | boolean;
+	} {
+		const parsedArgs: { [key: string]: string | boolean } = {};
 
 		for (let i = 0; i < args.length; i++) {
 			const currentArg = args[i];
 			const nextArg = args[i + 1] ?? "-";
 
-			if (currentArg.startsWith("-") && !nextArg.startsWith("-")) {
+			if (!currentArg.startsWith("-")) continue;
+
+			if (!nextArg.startsWith("-")) {
 				parsedArgs[currentArg.replace(/-/g, "")] = nextArg;
 				i++;
+			} else {
+				parsedArgs[currentArg.replace(/-/g, "")] = true;
 			}
 		}
 
