@@ -39,13 +39,18 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 };
 
-export function formatText(text: string, ...styles: string[]): string {
-	const selectedStyles = styles
+export function formatText(
+	text: string,
+	...styles: Array<keyof typeof styleCodes>
+): string {
+	const esc = (codes: string) => `\x1b[${codes}m`;
+
+	const codes = styles
 		.map(style => styleCodes[style])
 		.filter(Boolean)
 		.join(";");
 
-	return `\x1b[${selectedStyles}m${text}\x1b[0m`;
+	return `${esc(codes)}${text.replaceAll(esc("0"), esc(codes))}${esc("0")}`;
 }
 
 export function removeFormatting(text: string): string {
