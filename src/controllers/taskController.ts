@@ -48,6 +48,30 @@ class TaskController {
 		log("Task created:\n" + displayTask(taskService.addTask(task)));
 	}
 
+	public completeTask(id: string) {
+		const task = taskService.findTask(parseInt(id));
+
+		if (!task) {
+			return;
+		}
+
+		taskService.completeTask(parseInt(id));
+
+		log(`Task "${task.name}" completed`);
+	}
+
+	public revertTask(id: string) {
+		const task = taskService.findTask(parseInt(id));
+
+		if (!task) {
+			return;
+		}
+
+		taskService.revertTask(parseInt(id));
+
+		log(`Task "${task.name}" reverted`);
+	}
+
 	public deleteTask(id: string) {
 		const task = taskService.findTask(parseInt(id));
 

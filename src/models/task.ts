@@ -1,5 +1,6 @@
 export default class Task {
 	public id: number;
+	public completed: boolean = false;
 	public priorityScore: number;
 	constructor(
 		public name: string,

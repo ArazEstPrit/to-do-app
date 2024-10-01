@@ -24,8 +24,8 @@ class TaskService {
 				return parsedDate < new Date()
 					? "Due date must be in the future"
 					: isNaN(parsedDate.getTime())
-					  ? "Invalid date"
-					  : true;
+					? "Invalid date"
+					: true;
 			},
 			optional: true,
 		},
@@ -50,8 +50,8 @@ class TaskService {
 				return isNaN(parsedEffort)
 					? "Effort must be a number"
 					: parsedEffort > 0 && parsedEffort <= 6
-					  ? true
-					  : "Effort must be between 1 and 6";
+					? true
+					: "Effort must be between 1 and 6";
 			},
 			optional: true,
 		},
@@ -64,8 +64,8 @@ class TaskService {
 				return isNaN(parsedImportance)
 					? "Importance must be a number"
 					: parsedImportance > 0 && parsedImportance <= 6
-					  ? true
-					  : "Importance must be between 1 and 6";
+					? true
+					: "Importance must be between 1 and 6";
 			},
 			optional: true,
 		},
@@ -115,7 +115,7 @@ class TaskService {
 				)
 		);
 
-		return task.priorityScore;
+		return task.completed ? 0 : task.priorityScore;
 	}
 
 	private updatePriorityScore() {
@@ -151,6 +151,24 @@ class TaskService {
 
 	private generateId(): number {
 		return Math.max(...this.tasks.map(t => t.id || 0), 0) + 1;
+	}
+
+	public completeTask(id: number) {
+		const task = this.findTask(id);
+		if (task) {
+			task.completed = true;
+			task.priorityScore = 0;
+			this.saveTasks();
+		}
+	}
+
+	public revertTask(id: number) {
+		const task = this.findTask(id);
+		if (task) {
+			task.completed = false;
+			task.priorityScore = this.calculatePriorityScore(task);
+			this.saveTasks();
+		}
 	}
 
 	public deleteTask(task: Task) {

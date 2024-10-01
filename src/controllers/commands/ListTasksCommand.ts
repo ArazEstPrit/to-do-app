@@ -1,3 +1,4 @@
+import taskService from "../../services/taskService.js";
 import { listTasks } from "../../views/console/listTasks.js";
 import Command from "./Command.js";
 
@@ -7,11 +8,18 @@ export default new Command(
 	["l"],
 	[
 		{
+			...taskService.taskDetails[3],
 			name: "tag",
-			char: "t",
-			type: "string",
+			ask: false,
+			optional: true,
+		},
+		{
+			name: "showCompleted",
+			char: "c",
+			type: "boolean",
 			optional: true,
 		},
 	],
-	({ tag }: { tag?: string }) => listTasks(tag)
+	(props: { tag?: string; showCompleted?: boolean }) =>
+		listTasks(props.tag, props.showCompleted)
 );

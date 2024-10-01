@@ -4,7 +4,7 @@ import { removeFormatting, formatText, DATE_FORMAT } from "./formatting.js";
 import { log } from "./logging.js";
 
 export const formatters: {
-	[K in keyof Task]: (value: Task[K]) => string;
+	[K in keyof Partial<Task>]: (value: Task[K]) => string;
 } = {
 	id: id => formatText(`#${id}`, "gray", "italic"),
 	name: name => formatText(name, "bold"),
@@ -28,9 +28,13 @@ export const formatters: {
 	priorityScore: score => formatText(`${score}`, "lightGreen"),
 };
 
-export function listTasks(tagFilter: string | undefined) {
+export function listTasks(
+	tagFilter: string | undefined,
+	showCompleted: boolean
+) {
 	const tasks = taskService
 		.getTasks()
+		.filter(task => !task.completed || showCompleted === true)
 		.filter(task => !tagFilter || task.tags.includes(tagFilter));
 
 	if (Object.keys(tasks).length === 0) {
@@ -73,7 +77,7 @@ export function displayTask(task: Task): string {
 		.filter(detail => detail !== "")
 		.join("\n");
 }
-function printTable(data: object[], headers: string[], columnGap = "  ") {
+function printTable(data: Task[], headers: string[], columnGap = "  ") {
 	const styleCell = (header: string, cell: unknown) =>
 		formatters[header] ? formatters[header](cell) : String(cell);
 
@@ -96,7 +100,7 @@ function printTable(data: object[], headers: string[], columnGap = "  ") {
 		{}
 	);
 
-	const headerRow = formatText(
+	const formattedHeaderRow = formatText(
 		headers
 			.map(
 				header =>
@@ -109,21 +113,24 @@ function printTable(data: object[], headers: string[], columnGap = "  ") {
 		"underline"
 	);
 
-	const rows = data
-		.map(row =>
-			headers
-				.map(
-					header =>
-						styleCell(header, row[header]) +
-						getPadding(
-							getUnformattedStyle(header, row[header]),
-							columnLengths[header]
-						)
-				)
-				.join(columnGap)
-		)
+	const formattedRows = data
+		.map(row => {
+			const rowStr = headers
+				.map(header => {
+					const cellValue = styleCell(header, row[header]);
+					const unformattedValue = removeFormatting(cellValue);
+					const padding = getPadding(
+						unformattedValue,
+						columnLengths[header]
+					);
+					return `${cellValue}${padding}`;
+				})
+				.join(columnGap);
+
+			return row.completed ? formatText(rowStr, "italic", "dim") : rowStr;
+		})
 		.join("\n");
 
-	log(headerRow);
-	log(rows);
+	log(formattedHeaderRow);
+	log(formattedRows);
 }

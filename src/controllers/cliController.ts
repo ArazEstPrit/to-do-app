@@ -1,5 +1,7 @@
 import Command from "./commands/Command.js";
 import AddTaskCommand from "./commands/AddTaskCommand.js";
+import CompleteTaskCommand from "./commands/CompleteTaskCommand.js";
+import RevertTaskCommand from "./commands/RevertTaskCommand.js";
 import DeleteTaskCommand from "./commands/DeleteTaskCommand.js";
 import EditTaskCommand from "./commands/EditTaskCommand.js";
 import HelpCommand from "./commands/HelpCommand.js";
@@ -13,6 +15,8 @@ class CliController {
 		AddTaskCommand,
 		ViewTaskCommand,
 		EditTaskCommand,
+		CompleteTaskCommand,
+		RevertTaskCommand,
 		DeleteTaskCommand,
 		ListTasksCommand,
 		OpenWebViewCommand,
