@@ -67,8 +67,12 @@ export function displayTask(task: Task): string {
 		" - " +
 		formatters.priorityScore(task.priorityScore);
 
+	const completed = task.completed
+		? formatText("completed", "green", "italic")
+		: "";
+
 	return [
-		[name, id].join(" "),
+		[name, id, completed].join(" "),
 		description,
 		dueDate,
 		tags,
