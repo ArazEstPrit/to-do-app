@@ -1,7 +1,7 @@
 import Task from "../models/task.js";
 import taskService from "../services/taskService.js";
 import { displayTask } from "../views/console/listTasks.js";
-import { log } from "../views/console/logging.js";
+import { log, logError } from "../views/console/logging.js";
 
 class TaskController {
 	private parseInputs(
@@ -55,6 +55,11 @@ class TaskController {
 			return;
 		}
 
+		if (task.completed) {
+			logError("Task already completed");
+			return;
+		}
+
 		taskService.completeTask(parseInt(id));
 
 		log(`Task "${task.name}" completed`);
@@ -64,6 +69,11 @@ class TaskController {
 		const task = taskService.findTask(parseInt(id));
 
 		if (!task) {
+			return;
+		}
+
+		if (!task.completed) {
+			logError("Task not completed");
 			return;
 		}
 
