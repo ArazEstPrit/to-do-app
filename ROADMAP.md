@@ -25,15 +25,14 @@ I'm outlining these as prerequisites for progressing to each version.
     - [x] Importance: 1-6
     - [x] Score calculated: Importance/Effort
     - [x] Due date closer -> higher priority
-- [ ] Task Operations:
+- [x] Task Operations:
   - [x] Edit Task
   - [x] Complete task (without deletion)
   - [x] View Tasks
     - [x] By tags
     - [x] Sort Priority score
-- [ ] UI:
-  - [ ] CLI improvements
-    - [ ] Tag autocomplete
+- [x] UI:
+  - [x] CLI improvements
   - [ ] Basic GUI - web app (use React?)
 
 ## 2.0.0
@@ -50,6 +49,7 @@ I'm outlining these as prerequisites for progressing to each version.
   - [ ] Basic Statistics
 - [ ] User Interface:
   - [ ] Improved CLI:
+    - [ ] Tag autocomplete
     - [ ] Some TUI aspects?
   - [ ] Improved GUI
     - [ ] Customizable themes?
