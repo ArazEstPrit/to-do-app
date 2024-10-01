@@ -50,7 +50,9 @@ export function formatText(
 		.filter(Boolean)
 		.join(";");
 
-	return `${esc(codes)}${text.replaceAll(esc("0"), esc(codes))}${esc("0")}`;
+	return `${esc(codes)}${text.replaceAll(esc("0"), esc("0;" + codes))}${esc(
+		"0"
+	)}`;
 }
 
 export function removeFormatting(text: string): string {
