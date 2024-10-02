@@ -1,8 +1,9 @@
+import { join } from "path";
 import Task from "../models/task.js";
 import { inputDefinition } from "../views/console/prompting.js";
 import { readFile, writeFile } from "./fileService.js";
 
-const TASK_FILE = "../../database/tasks.json";
+export const TASK_FILE = join(import.meta.dirname, "../../database/tasks.json");
 
 class TaskService {
 	private tasks: Task[] = [];
@@ -24,8 +25,8 @@ class TaskService {
 				return parsedDate < new Date()
 					? "Due date must be in the future"
 					: isNaN(parsedDate.getTime())
-					? "Invalid date"
-					: true;
+					  ? "Invalid date"
+					  : true;
 			},
 			optional: true,
 		},
@@ -50,8 +51,8 @@ class TaskService {
 				return isNaN(parsedEffort)
 					? "Effort must be a number"
 					: parsedEffort > 0 && parsedEffort <= 6
-					? true
-					: "Effort must be between 1 and 6";
+					  ? true
+					  : "Effort must be between 1 and 6";
 			},
 			optional: true,
 		},
@@ -64,8 +65,8 @@ class TaskService {
 				return isNaN(parsedImportance)
 					? "Importance must be a number"
 					: parsedImportance > 0 && parsedImportance <= 6
-					? true
-					: "Importance must be between 1 and 6";
+					  ? true
+					  : "Importance must be between 1 and 6";
 			},
 			optional: true,
 		},
@@ -87,7 +88,7 @@ class TaskService {
 		this.loadTasks();
 	}
 
-	private loadTasks() {
+	public loadTasks() {
 		this.tasks = JSON.parse(readFile(TASK_FILE) || "[]");
 
 		this.tasks = this.tasks.map(task => {
