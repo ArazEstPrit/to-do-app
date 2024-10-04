@@ -44,7 +44,6 @@ export function listTasks(
 			"id",
 			"name",
 			"dueDate",
-			"description",
 			"tags",
 			"effort",
 			"importance",
