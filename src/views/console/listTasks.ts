@@ -30,12 +30,19 @@ export const formatters: {
 
 export function listTasks(
 	tagFilter: string | undefined,
-	showCompleted: boolean
+	showCompleted: boolean,
+	sortDueDate: boolean
 ) {
 	const tasks = taskService
 		.getTasks()
 		.filter(task => !task.completed || showCompleted === true)
-		.filter(task => !tagFilter || task.tags.includes(tagFilter));
+		.filter(task => !tagFilter || task.tags.includes(tagFilter))
+		.sort((a, b) =>
+			sortDueDate
+				? (new Date(a.dueDate).getTime() || 0) -
+				  (new Date(b.dueDate).getTime() || 0)
+				: 0
+		);
 
 	if (Object.keys(tasks).length === 0) {
 		log("No tasks found");

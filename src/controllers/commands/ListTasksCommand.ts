@@ -19,7 +19,13 @@ export default new Command(
 			type: "boolean",
 			optional: true,
 		},
+		{
+			name: "sortDueDate",
+			char: "d",
+			type: "boolean",
+			optional: true,
+		},
 	],
-	(props: { tag?: string; showCompleted?: boolean }) =>
-		listTasks(props.tag, props.showCompleted)
+	(props: { tag?: string; showCompleted?: boolean; sortDueDate?: boolean }) =>
+		listTasks(props.tag, props.showCompleted, props.sortDueDate),
 );
