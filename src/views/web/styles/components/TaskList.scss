@@ -1,0 +1,94 @@
+@use "../utils/vars";
+
+.task-list {
+	display: flex;
+	flex-direction: column;
+
+	gap: 4px;
+
+	.item {
+		display: flex;
+		flex-direction: row;
+
+		width: 500px;
+
+		background-color: transparentize($color: vars.$g800, $amount: 0.7);
+
+		padding: 6px 10px;
+		border-radius: 10px;
+
+		gap: 10px;
+
+		.id {
+			font-style: italic;
+			font-weight: 600;
+			width: 22px;
+			color: vars.$g100;
+		}
+
+		.name-description {
+			display: flex;
+			gap: 6px;
+			flex: 1;
+
+			align-items: center;
+
+			.name {
+				font-weight: 600;
+			}
+
+			.description-button {
+				cursor: pointer;
+				background-color: vars.$primary-background;
+				border-radius: 7px;
+
+				height: fit-content;
+
+				display: flex;
+
+				gap: 2px;
+
+				padding: 4px;
+
+				.dot {
+					width: 4px;
+					height: 4px;
+
+					background-color: vars.$primary;
+					border-radius: 50%;
+				}
+			}
+		}
+
+		.due-date {
+			font-style: italic;
+			font-weight: 500;
+			align-self: flex-end;
+		}
+
+		.mini-score {
+			display: flex;
+			gap: 4px;
+			align-self: flex-end;
+
+			.effort,
+			.importance,
+			.score {
+				font-weight: 600;
+				font-variant-numeric: oldstyle-nums;
+			}
+
+			.effort {
+				color: vars.$effort;
+			}
+
+			.importance {
+				color: vars.$importance;
+			}
+
+			.score {
+				color: vars.$score;
+			}
+		}
+	}
+}
