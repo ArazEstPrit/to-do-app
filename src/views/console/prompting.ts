@@ -83,6 +83,28 @@ function buildPromptText(prompt: inputDefinition): string {
 	return formattedPromptText;
 }
 
+function distanceToNextOccurrence(
+	string: string[],
+	index: number,
+	char: string,
+	direction: number
+): number {
+	let movement = 0;
+	while (
+		index + direction >= 0 &&
+		index + direction <= string.length &&
+		string[index] !== char
+	) {
+		movement += direction;
+		index += direction;
+	}
+
+	return index > 0 && movement === 0
+		? distanceToNextOccurrence(string, index + direction, char, direction) +
+				direction
+		: movement;
+}
+
 function handleTextInput(defaultValue: string): Promise<string> {
 	const inputBuffer = String(defaultValue || "").split("") || [];
 	let cursorIndex = inputBuffer.length;
@@ -109,50 +131,78 @@ function handleTextInput(defaultValue: string): Promise<string> {
 			process.stdout.moveCursor(-1, 0);
 		},
 		"\u001b[1;5C": () => {
-			let i = 0;
-			if (inputBuffer[cursorIndex] === " ") {
-				i++;
-				cursorIndex++;
-			}
-			while (
-				inputBuffer[cursorIndex] &&
-				inputBuffer[cursorIndex] !== " "
-			) {
-				i++;
-				cursorIndex++;
-			}
-			process.stdout.moveCursor(i, 0);
+			const movement = distanceToNextOccurrence(
+				inputBuffer,
+				cursorIndex,
+				" ",
+				1
+			);
+			cursorIndex += movement;
+			process.stdout.moveCursor(movement, 0);
 		},
 		"\u001b[1;5D": () => {
-			let i = 0;
-			if (inputBuffer[cursorIndex - 1] === " ") {
-				i--;
-				cursorIndex--;
-			}
-			while (
-				inputBuffer[cursorIndex - 1] &&
-				inputBuffer[cursorIndex - 1] !== " "
-			) {
-				i--;
-				cursorIndex--;
-			}
-			process.stdout.moveCursor(i, 0);
+			const movement = distanceToNextOccurrence(
+				inputBuffer,
+				cursorIndex,
+				" ",
+				-1
+			);
+			cursorIndex += movement;
+			process.stdout.moveCursor(movement, 0);
 		},
 		"\b": () => {
-			if (cursorIndex === 0) return;
+			if (cursorIndex <= 0) return;
 
-			inputBuffer.splice(cursorIndex - 1, 1);
 			cursorIndex--;
+
+			inputBuffer.splice(cursorIndex, 1);
 			const afterCursor = inputBuffer.slice(cursorIndex).join("");
-			process.stdout.write(`\u001b[1D${afterCursor}`);
+
+			process.stdout.moveCursor(-1, 0);
+			process.stdout.write(afterCursor);
 			process.stdout.clearLine(1);
-			process.stdout.write(
-				afterCursor.length === 0 ? "" : `\u001b[${afterCursor.length}D`
+			process.stdout.moveCursor(-afterCursor.length, 0);
+		},
+		"\x7f": () => {
+			if (cursorIndex <= 0) return;
+
+			const movement = distanceToNextOccurrence(
+				inputBuffer,
+				cursorIndex,
+				" ",
+				-1
 			);
+			cursorIndex += movement;
+
+			inputBuffer.splice(cursorIndex, -movement);
+			const afterCursor = inputBuffer.slice(cursorIndex).join("");
+
+			process.stdout.moveCursor(movement, 0);
+			process.stdout.clearLine(1);
+			process.stdout.write(afterCursor);
+			process.stdout.moveCursor(-afterCursor.length, 0);
 		},
 		"\r": resolve => {
 			process.stdout.write("\n");
 			resolve(inputBuffer.join(""));
+		},
+		"\u001b[3~": () => {
+			inputBuffer.splice(cursorIndex, 1);
+			const afterCursor = inputBuffer.slice(cursorIndex).join("");
+			process.stdout.clearLine(1);
+			process.stdout.write(afterCursor);
+			process.stdout.moveCursor(-afterCursor.length, 0);
+		},
+		"\u001b[3;5~": () => {
+			// We add 1 because we want to remove the space also
+			const movement =
+				distanceToNextOccurrence(inputBuffer, cursorIndex, " ", 1) + 1;
+
+			inputBuffer.splice(cursorIndex, movement);
+			const afterCursor = inputBuffer.slice(cursorIndex).join("");
+			process.stdout.clearLine(1);
+			process.stdout.write(afterCursor);
+			process.stdout.moveCursor(-afterCursor.length, 0);
 		},
 	};
 
@@ -169,25 +219,20 @@ function handleTextInput(defaultValue: string): Promise<string> {
 			cursorIndex++;
 			const afterCursor = inputBuffer.slice(cursorIndex).join("");
 
-			process.stdout.write(
-				key +
-					afterCursor +
-					(afterCursor.length === 0
-						? ""
-						: `\u001b[${afterCursor.length}D`)
-			);
+			process.stdout.write(key + afterCursor);
+			process.stdout.moveCursor(-afterCursor.length, 0);
 		});
 
 		// For debugging
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		function helper() {
 			const afterCursor = inputBuffer.slice(cursorIndex).join("");
 			const test = `"${inputBuffer.join(
 				""
 			)}" ${cursorIndex} "${afterCursor}" ${afterCursor.length}`;
-			process.stdout.write(
-				`\u001b[1B\b \u001b[K${test}\u001b[1A\u001b[${test.length}D`
-			);
+			process.stdout.moveCursor(0, 1);
+			process.stdout.clearLine(0);
+			process.stdout.write(test);
+			process.stdout.moveCursor(-test.length, -1);
 		}
 
 		if (inputBuffer.length > 0) {
