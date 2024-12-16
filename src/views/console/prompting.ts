@@ -99,7 +99,7 @@ function distanceToNextOccurrence(
 		index += direction;
 	}
 
-	return index > 0 && movement === 0
+	return index < string.length && index > 0 && movement === 0
 		? distanceToNextOccurrence(string, index + direction, char, direction) +
 				direction
 		: movement;
@@ -150,6 +150,13 @@ function handleTextInput(defaultValue: string): Promise<string> {
 			cursorIndex += movement;
 			process.stdout.moveCursor(movement, 0);
 		},
+		// These are the ctrl+arrow key sequences for macOS
+		"\u001bb": () => {
+			SPECIAL_CHARS["\u001b[1;5D"]();
+		},
+		"\u001bf": () => {
+			SPECIAL_CHARS["\u001b[1;5C"]();
+		},
 		"\b": () => {
 			if (cursorIndex <= 0) return;
 
@@ -166,12 +173,18 @@ function handleTextInput(defaultValue: string): Promise<string> {
 		"\x7f": () => {
 			if (cursorIndex <= 0) return;
 
-			const movement = distanceToNextOccurrence(
-				inputBuffer,
-				cursorIndex,
-				" ",
-				-1
-			);
+			// In the mac terminal, there is no escape sequence for
+			// ctrl+backspace. The escape sequence for backspace is \x7f, which
+			// is the same as ctrl+backspace on windows.
+			const movement =
+				process.platform === "darwin"
+					? -1
+					: distanceToNextOccurrence(
+							inputBuffer,
+							cursorIndex,
+							" ",
+							-1
+					  );
 			cursorIndex += movement;
 
 			inputBuffer.splice(cursorIndex, -movement);
