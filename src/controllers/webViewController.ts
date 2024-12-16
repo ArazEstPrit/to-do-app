@@ -13,7 +13,7 @@ const PORT = 3000;
 
 export async function buildSite() {
 	const build = await context({
-		entryPoints: [resolve(srcPath, "./main.tsx")],
+		entryPoints: [resolve(srcPath, "./main.ts"), resolve(srcPath, "./styles/main.scss")],
 		outdir: distPath,
 		plugins: [sassPlugin()],
 		bundle: true,
