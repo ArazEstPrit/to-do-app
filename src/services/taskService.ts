@@ -20,14 +20,8 @@ class TaskService {
 			name: "dueDate",
 			char: "d",
 			type: "date",
-			condition: (date: string): boolean | string => {
-				const parsedDate = new Date(date);
-				return parsedDate < new Date()
-					? "Due date must be in the future"
-					: isNaN(parsedDate.getTime())
-					  ? "Invalid date"
-					  : true;
-			},
+			condition: (date: string): boolean | string =>
+				isNaN(new Date(date).getTime()) ? "Invalid date" : true,
 			optional: true,
 		},
 		{
