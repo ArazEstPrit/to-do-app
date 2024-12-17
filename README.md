@@ -24,8 +24,8 @@ To use the app, run `todo` along with one of these commands:
   * Completes the task with the specified task ID.
 * `revert|c --id <task ID`
   * Reverts the task with the specified task ID.
-* `list|l [--tag <tag>] [--showCompleted]`
-  * Lists all un-completed tasks, or filter them by tag. Use `--showCompleted` to list all tasks.
+* `list|l [--tag <tag>] [--showCompleted] [--sortDueDate]`
+  * Lists all un-completed tasks, or filter them by tag. Use `--showCompleted` to list all tasks. Use `--sortDueDate` to sort tasks by due date.
 * `view|v --id <task ID>`
   * Displays the info of the task with the specified task ID.
 * `edit|e --id <task ID> [--name <task name>] [--dueDate <due date>] [--description <description>] [--tags <"tag1 tag2 ...">] [--effort <1-6>] [--importance <1-6>]`
@@ -40,6 +40,7 @@ To use the app, run `todo` along with one of these commands:
 `--importance`: `-i`
 `--id`: `-k`
 `--showCompleted`: `-c`
+`--sortDueDate`: `-d`
 
 For example:
 
