@@ -1,19 +1,24 @@
 import { context } from "esbuild";
 import { sassPlugin } from "esbuild-sass-plugin";
-import { readFile, writeFile } from "../services/fileService.js";
 import express from "express";
 import { exec } from "child_process";
 import { log } from "../views/console/logging.js";
 import { resolve } from "path";
 import { apiRouter } from "./serverController.js";
+import { copyFileSync, cpSync } from "fs";
 
 const srcPath = resolve(import.meta.dirname, "../../src/views/web/");
 const distPath = resolve(import.meta.dirname, "../../dist/views/web/");
 const PORT = 3000;
 
+const staticAssets = ["./index.html", "./assets/"];
+
 export async function buildSite() {
 	const build = await context({
-		entryPoints: [resolve(srcPath, "./main.ts"), resolve(srcPath, "./styles/main.scss")],
+		entryPoints: [
+			resolve(srcPath, "./main.ts"),
+			resolve(srcPath, "./styles/main.scss"),
+		],
 		outdir: distPath,
 		plugins: [sassPlugin()],
 		bundle: true,
@@ -24,10 +29,17 @@ export async function buildSite() {
 
 	await build.watch();
 
-	writeFile(
-		resolve(distPath, "./index.html"),
-		readFile(resolve(srcPath, "./index.html"))
-	);
+	staticAssets.forEach(file => {
+		const isDir = file.endsWith("/");
+
+		if (isDir) {
+			cpSync(resolve(srcPath, file), resolve(distPath, file), {
+				recursive: true,
+			});
+		} else {
+			copyFileSync(resolve(srcPath, file), resolve(distPath, file));
+		}
+	});
 }
 
 export async function startWebView() {

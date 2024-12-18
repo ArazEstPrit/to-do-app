@@ -25,6 +25,11 @@ $g300: #49494c;
 $g200: #313133;
 $g100: #212122;
 
+$background: transparentize(
+	$color: $g800,
+	$amount: 0.7,
+);
+
 $primary: #835cc1;
 $primary-light: #9472ca;
 $primary-dark: #7351a9;

@@ -17,13 +17,14 @@ $tags: (
 	"h2": 5,
 	"h3": 4,
 	"h4": 3,
-	"p": 0,
+	"h5": 2,
+	"h6": 1,
 );
 
 @each $tag, $index in $tags {
 	#{$tag},
 	.#{$tag} {
-		font-weight: vars.$font-weight + $index * 50;
+		font-weight: 700;
 		font-size: (vars.$font-size * math.pow(vars.$font-ratio, $index));
 	}
 }
