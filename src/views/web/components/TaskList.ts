@@ -1,4 +1,4 @@
-import { $, h } from "../utils.js";
+import { $, h } from "../utils/domHelpers.js";
 import { fetchJSON } from "../utils/fetch.js";
 import { DATE_FORMAT } from "../../console/formatting.js";
 import Task from "../../../models/task.js";

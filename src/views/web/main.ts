@@ -1,5 +1,5 @@
 import { TaskList } from "./components/TaskList.ts";
-import { $, h } from "./utils.ts";
+import { $, h } from "./utils/domHelpers.ts";
 
 async function init() {
 	const root = $("#root")[0];
