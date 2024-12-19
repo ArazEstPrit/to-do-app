@@ -4,29 +4,45 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 	width: 550px;
-
 	gap: 8px;
+
+	&.show-completed {
+		.completed-toggle {
+			background-color: $primary-background;
+			border-color: $primary-light;
+			color: $primary-dark;
+		}
+
+		.item.completed {
+			display: flex;
+		}
+	}
+
+	&.sort-date #sort-date,
+	&:not(.sort-date) #sort-priority {
+		text-decoration: underline;
+	}
+
+	&:not(.show-completed)
+		.task-list:not(:has(> :not(.completed):not(.hidden)))::after,
+	&.show-completed .task-list:not(:has(> :not(.hidden)))::after {
+		content: "Nothing to show.";
+	}
 }
 
 .task-list-header {
 	display: flex;
 	gap: 6px;
-
 	width: 100%;
 	height: 24px;
 
 	.search {
 		display: flex;
 		gap: 0;
-
-		border: solid 1px $primary-background;
-
-		background-color: $background;
-
 		padding: 0 4px;
-
+		background-color: $background;
+		border: 1px solid $primary-background;
 		border-radius: 12px;
 
 		&:has(input:focus-visible) {
@@ -35,16 +51,13 @@
 
 		img {
 			padding: 4px;
-
 			width: 20px;
 			aspect-ratio: 1;
-
 			pointer-events: none;
 		}
 
 		input {
 			width: 150px;
-
 			background: none;
 			border: none;
 			outline: none;
@@ -57,38 +70,28 @@
 	}
 
 	.completed-toggle,
-	.sort {
-		cursor: pointer;
-
-		border: solid 1px $primary-background;
-		border-radius: 12px;
-		padding: 4px 12px;
-
-		background-color: $background;
-
-		gap: 4px;
-
+	.sort-options {
 		display: flex;
 		align-items: center;
-
+		gap: 4px;
+		padding: 4px 12px;
+		border: 1px solid $primary-background;
+		border-radius: 12px;
+		background-color: $background;
 		font-weight: 600;
 		font-style: italic;
 		color: $g200;
-	}
-
-	.sort .options {
-		display: flex;
-		gap: 3px;
-
-		align-items: center;
+		cursor: pointer;
 
 		.separator {
 			width: 1px;
 			height: 12px;
-
-			border-radius: 2px;
-
 			background-color: $g500;
+			border-radius: 2px;
+		}
+
+		.sort-option {
+			font-style: normal;
 		}
 	}
 
@@ -99,181 +102,143 @@
 	}
 }
 
-.task-list-container.sort-date .option#sort-date {
-	text-decoration: underline;
-}
-
-.task-list-container:not(.sort-date) .option#sort-score {
-	text-decoration: underline;
-}
-
-.task-list-container.show-completed {
-	.completed-toggle {
-		background-color: $primary-background;
-		border-color: $primary-light;
-
-		color: $primary-dark;
-	}
-
-	.item.completed {
-		display: flex;
-	}
-}
-
 .task-list {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 	gap: 6px;
-}
 
-.task-list .item {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+	.item {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		width: 550px;
+		height: 30px;
+		gap: 10px;
+		padding: 6px 10px;
+		border: 1px solid $primary-background;
+		background-color: $background;
+		border-radius: 10px;
+		line-height: 16px;
+		transition: order 0ms;
 
-	width: 550px;
-	height: 30px;
+		&.hidden {
+			display: none !important;
+		}
 
-	line-height: 16px;
+		&.completed {
+			display: none;
+			background-color: transparentize($g800, 0.3);
 
-	background-color: $background;
+			.name {
+				text-decoration: line-through;
+				font-style: italic;
 
-	border: 1px solid $primary-background;
-
-	padding: 6px 10px;
-	border-radius: 10px;
-
-	gap: 10px;
-
-	.id {
-		font-style: italic;
-		font-weight: 600;
-		width: 25px;
-		color: $g300;
-	}
-
-	&.completed {
-		background-color: transparentize($color: $g800, $amount: 0.3);
-
-		display: none;
-
-		.name {
-			text-decoration: line-through;
-			font-style: italic;
-
-			&:hover {
-				text-decoration: line-through underline;
+				&:hover {
+					text-decoration: line-through underline;
+				}
 			}
 		}
-	}
 
-	.name-description {
-		display: flex;
-		gap: 6px;
-		flex: 1;
-		align-items: center;
-	}
-
-	.name {
-		font-weight: 600;
-		cursor: pointer;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
-
-	.description {
-		background-color: $primary-background;
-		border-radius: 7px;
-
-		height: fit-content;
-
-		cursor: context-menu;
-
-		display: flex;
-		gap: 2px;
-		padding: 4px;
-
-		.dot {
-			width: 4px;
-			height: 4px;
-
-			background-color: $primary;
-			border-radius: 50%;
-		}
-	}
-
-	.tags {
-		display: flex;
-		gap: 4px;
-
-		height: 20px;
-	}
-
-	.no-tags {
-		color: $g300;
-		font-style: italic;
-		font-weight: 500;
-	}
-
-	.due-date {
-		font-style: italic;
-		font-weight: 500;
-		align-self: flex-end;
-	}
-
-	.no-due-date {
-		font-weight: 500;
-		align-self: flex-end;
-		color: $g300;
-		font-style: italic;
-	}
-
-	.mini-score {
-		display: flex;
-		gap: 4px;
-		align-self: flex-end;
-
-		.effort,
-		.importance,
-		.score {
+		.id {
+			width: 25px;
+			font-style: italic;
 			font-weight: 600;
-			font-variant-numeric: oldstyle-nums;
+			color: $g300;
 		}
 
-		.effort {
-			color: $effort;
+		.name-description {
+			display: flex;
+			flex: 1;
+			gap: 6px;
+
+			.name {
+				font-weight: 600;
+				cursor: pointer;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			.description {
+				display: flex;
+				gap: 2px;
+				padding: 4px;
+				background-color: $primary-background;
+				border-radius: 7px;
+				cursor: context-menu;
+
+				.dot {
+					width: 4px;
+					height: 4px;
+					background-color: $primary;
+					border-radius: 50%;
+				}
+			}
 		}
 
-		.importance {
-			color: $importance;
+		.tags {
+			display: flex;
+			gap: 4px;
+
+			.no-tags {
+				color: $g300;
+				font-style: italic;
+				font-weight: 500;
+			}
 		}
 
-		.score {
-			color: $score;
+		.due-date,
+		.no-due-date {
+			align-self: flex-end;
+			font-style: italic;
+			font-weight: 500;
+
+			&.no-due-date {
+				color: $g300;
+			}
+		}
+
+		.mini-score {
+			display: flex;
+			align-self: flex-end;
+			gap: 4px;
+
+			.effort,
+			.importance,
+			.score {
+				font-weight: 600;
+			}
+
+			.effort {
+				color: $effort;
+			}
+
+			.importance {
+				color: $importance;
+			}
+
+			.score {
+				color: $score;
+			}
 		}
 	}
 }
 
 .tag {
-	background-color: $info-background;
-	font-style: italic;
-	padding: 0px 6px;
 	display: flex;
 	align-items: center;
+	padding: 0 6px;
+	background-color: $info-background;
 	border-radius: 40px;
-
 	font-size: 16px;
 	font-weight: 500;
-
+	font-style: italic;
 	cursor: pointer;
 	user-select: none;
-
-	outline: 0px solid $info-light;
-	transition: 0ms;
+	outline: 0 solid $info-light;
+	transition: outline-width 0.2s;
 
 	&:hover {
 		outline-width: 1px;
