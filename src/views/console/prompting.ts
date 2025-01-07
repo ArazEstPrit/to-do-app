@@ -85,24 +85,47 @@ function buildPromptText(prompt: inputDefinition): string {
 
 function distanceToNextOccurrence(
 	string: string[],
-	index: number,
-	char: string,
+	startingIndex: number,
+	targetChar: string,
 	direction: number
 ): number {
-	let movement = 0;
-	while (
-		index + direction >= 0 &&
-		index + direction <= string.length &&
-		string[index] !== char
-	) {
-		movement += direction;
-		index += direction;
-	}
+	// let index = startingIndex;
+	// let movement = 0;
 
-	return index < string.length && index > 0 && movement === 0
-		? distanceToNextOccurrence(string, index + direction, char, direction) +
-				direction
-		: movement;
+	// while (index > 0 && index < string.length && string[index] !== char) {
+	// 	movement += direction;
+	// 	index += direction;
+	// }
+
+	// return index < string.length && index > 0 && movement === 0
+	// 	? distanceToNextOccurrence(string, index + direction, char, direction) +
+	// 			direction
+	// 	: movement;
+
+	if (startingIndex < 0 || startingIndex > string.length) return 0;
+
+	const occurrenceDistances = string
+		.reduce(
+			(acc, char, index) => {
+				if (char === targetChar) acc.push(index - startingIndex);
+				return acc;
+			},
+			[-startingIndex, string.length - startingIndex]
+		)
+		.filter(dist => dist * direction > 0)
+		.sort((a, b) => Math.abs(a) - Math.abs(b));
+
+	if (occurrenceDistances.length === 0) return 0;
+
+	if (occurrenceDistances.includes(0))
+		return distanceToNextOccurrence(
+			string,
+			startingIndex + direction,
+			targetChar,
+			direction
+		);
+
+	return occurrenceDistances[0];
 }
 
 function handleTextInput(defaultValue: string): Promise<string> {
@@ -207,9 +230,12 @@ function handleTextInput(defaultValue: string): Promise<string> {
 			process.stdout.moveCursor(-afterCursor.length, 0);
 		},
 		"\u001b[3;5~": () => {
-			// We add 1 because we want to remove the space also
-			const movement =
-				distanceToNextOccurrence(inputBuffer, cursorIndex, " ", 1) + 1;
+			const movement = distanceToNextOccurrence(
+				inputBuffer,
+				cursorIndex,
+				" ",
+				1
+			);
 
 			inputBuffer.splice(cursorIndex, movement);
 			const afterCursor = inputBuffer.slice(cursorIndex).join("");
@@ -223,6 +249,7 @@ function handleTextInput(defaultValue: string): Promise<string> {
 		process.stdin.on("data", (key: string) => {
 			if (SPECIAL_CHARS[key]) {
 				SPECIAL_CHARS[key](resolve);
+				helper();
 				return;
 			}
 
@@ -234,6 +261,7 @@ function handleTextInput(defaultValue: string): Promise<string> {
 
 			process.stdout.write(key + afterCursor);
 			process.stdout.moveCursor(-afterCursor.length, 0);
+			helper();
 		});
 
 		// For debugging
