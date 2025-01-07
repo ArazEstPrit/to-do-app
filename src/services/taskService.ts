@@ -96,19 +96,25 @@ class TaskService {
 	}
 
 	public calculatePriorityScore(task: Task): number {
+		const taskDueDate = new Date(task.dueDate);
+
+		const now = new Date();
+
 		const daysUntilDueDate = Math.ceil(
-			(new Date(task.dueDate).getTime() - new Date().getTime()) /
-				1000 /
-				3600 /
-				24
+			(taskDueDate.getTime() - now.getTime()) / 1000 / 3600 / 24
 		);
-		task.priorityScore = Math.round(
-			(2 * (task.importance ?? 3)) /
-				Math.pow(
-					daysUntilDueDate > 0 ? daysUntilDueDate : 1,
-					1 / (task.effort ?? 3)
-				)
-		);
+
+		const z = 2;
+
+		task.priorityScore =
+			Math.round(
+				((2 * task.importance) /
+					Math.pow(
+						daysUntilDueDate > 0 ? daysUntilDueDate : 1,
+						1 / task.effort
+					)) *
+					z
+			) / z;
 
 		return task.completed ? 0 : task.priorityScore;
 	}
