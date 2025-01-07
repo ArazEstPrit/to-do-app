@@ -89,19 +89,6 @@ function distanceToNextOccurrence(
 	targetChar: string,
 	direction: number
 ): number {
-	// let index = startingIndex;
-	// let movement = 0;
-
-	// while (index > 0 && index < string.length && string[index] !== char) {
-	// 	movement += direction;
-	// 	index += direction;
-	// }
-
-	// return index < string.length && index > 0 && movement === 0
-	// 	? distanceToNextOccurrence(string, index + direction, char, direction) +
-	// 			direction
-	// 	: movement;
-
 	if (startingIndex < 0 || startingIndex > string.length) return 0;
 
 	const occurrenceDistances = string
