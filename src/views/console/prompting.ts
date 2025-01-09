@@ -236,7 +236,6 @@ function handleTextInput(defaultValue: string): Promise<string> {
 		process.stdin.on("data", (key: string) => {
 			if (SPECIAL_CHARS[key]) {
 				SPECIAL_CHARS[key](resolve);
-				helper();
 				return;
 			}
 
@@ -248,7 +247,6 @@ function handleTextInput(defaultValue: string): Promise<string> {
 
 			process.stdout.write(key + afterCursor);
 			process.stdout.moveCursor(-afterCursor.length, 0);
-			helper();
 		});
 
 		// For debugging
